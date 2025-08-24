@@ -1,0 +1,1 @@
+{"version":3,"file":"MyContract.d.mts","sourceRoot":"","sources":["../src/MyContract.mts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;GAeG;AACH,UAAU,UAAU;IAChB,WAAW,CAAC,MAAM,EAAE,MAAM,EAAE,MAAM,EAAE,MAAM,GAAG,IAAI,CAAC;IAClD,QAAQ,EAAE,MAAM,CAAC;CACpB;AAED,YAAY,EAAE,UAAU,EAAE,CAAC"}
