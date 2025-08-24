@@ -1,4 +1,4 @@
-import { MyClass } from '@/MyClass.mts';
+import MyClass from '@/MyClass.mts';
 import Test from 'tests/TestHelper.mts';
 
 describe('class MyClass', () => {
