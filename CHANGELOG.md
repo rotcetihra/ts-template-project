@@ -5,7 +5,12 @@
 Формат основан на [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/),  
 и проект использует [Semantic Versioning](https://semver.org/lang/ru/).
 
-## [Невыпущено]
+## [0.2.2] - 2025-09-26
+
+    - Исправили X
+    - Добавили Y
+
+## [0.1.0]
 
 ### Добавлено
 
