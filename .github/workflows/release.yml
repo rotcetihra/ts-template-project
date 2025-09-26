@@ -3,16 +3,17 @@ name: Release
 
 on:
     push:
-        tags: ['v*'] # триггер по тегам vX.Y.Z (включая пререлизы: v1.2.3-rc.1)
-    workflow_dispatch: {} # ручной запуск на случай внезапных инсайтов
+        tags: ['v*'] # vX.Y.Z и пререлизы типа v1.2.3-rc.1
+    workflow_dispatch: {} # ручной запуск, когда внезапно понадобилось
 
 permissions:
-    contents: write # нужно, чтобы создать GitHub Release
-    id-token: write # нужно для npm --provenance (OIDC подпись)
+    contents: write # создать GitHub Release
+    packages: write # публиковать в GitHub Packages
+    id-token: write # npm --provenance (OIDC подпись)
 
 jobs:
     publish:
-        name: GitHub Release → npm publish (только если релиз ок)
+        name: GitHub Release → npmjs → GitHub Packages
         runs-on: ubuntu-latest
         env:
             NODE_OPTIONS: --experimental-vm-modules
@@ -53,13 +54,13 @@ jobs:
                     exit 1
                   fi
 
-            # Не тратим время на релиз, если такая версия уже есть в npm
-            - name: Ensure version is new on npm
+            # Рано валимся, если версия уже есть в npmjs
+            - name: Ensure version is new on npmjs
               run: |
                   NAME=$(node -p "require('./package.json').name")
                   VERSION=$(node -p "require('./package.json').version")
                   if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
-                    echo "❌ $NAME@$VERSION уже опубликован в npm. Подними версию и перезапусти."
+                    echo "❌ $NAME@$VERSION уже опубликован в npmjs. Подними версию и перезапусти."
                     exit 1
                   fi
 
@@ -70,45 +71,23 @@ jobs:
               run: |
                   set -euo pipefail
                   VERSION="${GITHUB_REF_NAME#v}"
+                  [ -f CHANGELOG.md ] || { echo "❌ CHANGELOG.md не найден"; exit 1; }
 
-                  if [ ! -f CHANGELOG.md ]; then
-                    echo "❌ CHANGELOG.md не найден"; exit 1
-                  fi
-
-                  # Экраним точки в версии: 0.2.2 → 0\.2\.2
                   V_ESC="${VERSION//./\\.}"
-
-                  # Заголовки вида:
-                  #   ## 0.2.2
-                  #   ## v0.2.2
-                  #   ## [0.2.2]
-                  #   ## [v0.2.2] - 2025-09-26
                   PATTERN="^##[[:space:]]+\\[?v?${V_ESC}\\]?([[:space:]]+[-–][[:space:]].*)?$"
-
                   START="$(grep -n -E "$PATTERN" CHANGELOG.md | head -1 | cut -d: -f1 || true)"
                   if [ -z "${START}" ]; then
                     echo "❌ В CHANGELOG.md нет секции для версии ${VERSION}"
-                    echo "— Найденные заголовки:"
                     grep -n -E '^##[[:space:]]+\[?v?[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md || true
                     exit 1
                   fi
-
                   END="$(awk -v s="$START" 'NR>s && /^##[[:space:]]+/{print NR; exit}' CHANGELOG.md)"
-                  if [ -z "${END}" ]; then
-                    END="$(wc -l < CHANGELOG.md)"; END=$((END + 1))
-                  fi
-
-                  # Вырезаем секцию [START, END)
+                  if [ -z "${END}" ]; then END="$(wc -l < CHANGELOG.md)"; END=$((END + 1)); fi
                   sed -n "${START},$((END-1))p" CHANGELOG.md > RELEASE_NOTES.md
-
-                  # Проверяем, что не пусто
-                  if [ ! -s RELEASE_NOTES.md ]; then
-                    echo "❌ RELEASE_NOTES.md пуст — парсинг не удался"; exit 1
-                  fi
-
+                  [ -s RELEASE_NOTES.md ] || { echo "❌ RELEASE_NOTES.md пуст — парсинг не удался"; exit 1; }
                   echo "found=true" >> "$GITHUB_OUTPUT"
 
-            # Готовим вложения к релизу (точный npm-тарбол, dist и docs)
+            # Точный тарбол, ушедший/идущий в реестры, плюс архивы
             - name: Create npm tarball
               run: |
                   PKG_TGZ=$(npm pack --silent)
@@ -119,7 +98,7 @@ jobs:
                   tar -czf dist.tgz dist
                   tar -czf docs.tgz docs || true
 
-            # СОЗДАНИЕ GITHUB RELEASE — КЛЮЧЕВОЙ ГЕЙТ
+            # 1) СОЗДАЁМ GITHUB RELEASE — это наш гейт
             - name: Create GitHub Release (CHANGELOG section)
               id: gh_release
               continue-on-error: true
@@ -136,16 +115,31 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            # ПУБЛИКАЦИЯ В NPM ТОЛЬКО ЕСЛИ РЕЛИЗ СОЗДАЛСЯ УСПЕШНО
-            - name: Publish to npm (only if GH release succeeded)
+            # 2) Публикуем в npmjs — только если релиз создан
+            - name: Publish to npmjs (only if GH release succeeded)
               if: steps.gh_release.outcome == 'success'
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Automation token из npm
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Automation token (publish)
               run: npm publish --access public --provenance
 
-            # Если релиз не создался — явно валим job, чтобы всё было честно
+            # 3) Публикуем в GitHub Packages (npm.pkg.github.com) — тоже только если релиз создан
+            - name: Publish to GitHub Packages (only if GH release succeeded)
+              if: steps.gh_release.outcome == 'success'
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # встроенный токен, права даёт permissions.packages: write
+              run: |
+                  NAME=$(node -p "require('./package.json').name")
+                  VERSION=$(node -p "require('./package.json').version")
+                  # если версия уже есть в GH Packages, пропускаем
+                  if npm view "$NAME@$VERSION" version --registry=https://npm.pkg.github.com >/dev/null 2>&1; then
+                    echo "::notice::$NAME@$VERSION уже есть в GitHub Packages — пропускаю публикацию."
+                  else
+                    npm publish --registry=https://npm.pkg.github.com
+                  fi
+
+            # Если релиз не создался — валим job и не публикуем никуда
             - name: Fail because GitHub Release failed
               if: steps.gh_release.outcome != 'success'
               run: |
-                  echo "❌ GitHub Release не создан — публикацию в npm пропустили."
+                  echo "❌ GitHub Release не создан — публикации в реестры пропущены."
                   exit 1
