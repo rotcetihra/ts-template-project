@@ -3,12 +3,12 @@ name: Release
 
 on:
     push:
-        tags: ['v*'] # Триггер по тэгам vX.Y.Z (включая пререлизы типа v1.2.3-rc.1)
-    workflow_dispatch: {} # Ручной запуск на случай твоей очередной «идеи»
+        tags: ['v*'] # триггер по тегам vX.Y.Z (включая пререлизы: v1.2.3-rc.1)
+    workflow_dispatch: {} # ручной запуск на случай внезапных инсайтов
 
 permissions:
-    contents: write # Нужно, чтобы создать GitHub Release
-    id-token: write # Нужно для npm --provenance (OIDC подпись)
+    contents: write # нужно, чтобы создать GitHub Release
+    id-token: write # нужно для npm --provenance (OIDC подпись)
 
 jobs:
     publish:
@@ -63,7 +63,7 @@ jobs:
                     exit 1
                   fi
 
-            # Секция из CHANGELOG.md для текущей версии → RELEASE_NOTES.md
+            # Достаём секцию из CHANGELOG.md для текущей версии → RELEASE_NOTES.md
             - name: Extract changelog section for this version
               id: notes
               shell: bash
@@ -75,7 +75,14 @@ jobs:
                     echo "❌ CHANGELOG.md не найден"; exit 1
                   fi
 
+                  # Экраним точки в версии: 0.2.2 → 0\.2\.2
                   V_ESC="${VERSION//./\\.}"
+
+                  # Заголовки вида:
+                  #   ## 0.2.2
+                  #   ## v0.2.2
+                  #   ## [0.2.2]
+                  #   ## [v0.2.2] - 2025-09-26
                   PATTERN="^##[[:space:]]+\\[?v?${V_ESC}\\]?([[:space:]]+[-–][[:space:]].*)?$"
 
                   START="$(grep -n -E "$PATTERN" CHANGELOG.md | head -1 | cut -d: -f1 || true)"
@@ -91,14 +98,17 @@ jobs:
                     END="$(wc -l < CHANGELOG.md)"; END=$((END + 1))
                   fi
 
-                  sed -n "${START},$((END-1))p" CHANGELOG.md \
-                    | sed -e :a -e '/^\n*$/{$d;N;ba' > RELEASE_NOTES.md
+                  # Вырезаем секцию [START, END)
+                  sed -n "${START},$((END-1))p" CHANGELOG.md > RELEASE_NOTES.md
 
-                  [ -s RELEASE_NOTES.md ] || { echo "❌ RELEASE_NOTES.md пуст"; exit 1; }
+                  # Проверяем, что не пусто
+                  if [ ! -s RELEASE_NOTES.md ]; then
+                    echo "❌ RELEASE_NOTES.md пуст — парсинг не удался"; exit 1
+                  fi
 
                   echo "found=true" >> "$GITHUB_OUTPUT"
 
-            # Готовим вложения к релизу (dist, docs, плюс точный npm-тарбол)
+            # Готовим вложения к релизу (точный npm-тарбол, dist и docs)
             - name: Create npm tarball
               run: |
                   PKG_TGZ=$(npm pack --silent)
@@ -112,7 +122,7 @@ jobs:
             # СОЗДАНИЕ GITHUB RELEASE — КЛЮЧЕВОЙ ГЕЙТ
             - name: Create GitHub Release (CHANGELOG section)
               id: gh_release
-              continue-on-error: true # не обрываем job сразу — нам нужно пропустить npm шаг
+              continue-on-error: true
               uses: softprops/action-gh-release@v2
               with:
                   tag_name: ${{ github.ref_name }} # vX.Y.Z
@@ -126,11 +136,11 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            # ПУБЛИКУЕМ В NPM ТОЛЬКО ЕСЛИ РЕЛИЗ СОЗДАЛСЯ УСПЕШНО
+            # ПУБЛИКАЦИЯ В NPM ТОЛЬКО ЕСЛИ РЕЛИЗ СОЗДАЛСЯ УСПЕШНО
             - name: Publish to npm (only if GH release succeeded)
               if: steps.gh_release.outcome == 'success'
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Automation token
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Automation token из npm
               run: npm publish --access public --provenance
 
             # Если релиз не создался — явно валим job, чтобы всё было честно
