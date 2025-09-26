@@ -67,6 +67,8 @@
     "theme": "typedoc-github-theme",
     // Список плагинов TypeDoc.
     "plugin": [
+        // Тема оформления.
+        "typedoc-github-theme",
         // Ссылки на MDN для встроенных типов и веб-API.
         "typedoc-plugin-mdn-links",
         // Переименовывает default-экспорт в его исходное имя.
