@@ -3,13 +3,13 @@ name: Release
 
 on:
     push:
-        tags: ['v*'] # vX.Y.Z и пререлизы типа v1.2.3-rc.1
-    workflow_dispatch: {} # ручной запуск, когда внезапно понадобилось
+        tags: ['v*'] # vX.Y.Z и пререлизы (v1.2.3-rc.1)
+    workflow_dispatch: {} # ручной запуск
 
 permissions:
-    contents: write # создать GitHub Release
-    packages: write # публиковать в GitHub Packages
-    id-token: write # npm --provenance (OIDC подпись)
+    contents: write # создание GitHub Release
+    packages: write # публикация в GitHub Packages
+    id-token: write # для npm --provenance (OIDC)
 
 jobs:
     publish:
@@ -22,11 +22,11 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Use Node 20
+            - name: Use Node 20 (npmjs registry)
               uses: actions/setup-node@v4
               with:
                   node-version: 20.x
-                  registry-url: 'https://registry.npmjs.org/'
+                  registry-url: https://registry.npmjs.org/
                   cache: npm
                   scope: '@rotcetihra'
                   always-auth: true
@@ -43,7 +43,6 @@ jobs:
             - name: Build docs (typedoc)
               run: npm run docs:build
 
-            # Тег vX.Y.Z обязан совпадать с package.json.version
             - name: Verify tag matches package.json version
               run: |
                   PKG_VERSION=$(node -p "require('./package.json').version")
@@ -54,7 +53,6 @@ jobs:
                     exit 1
                   fi
 
-            # Рано валимся, если версия уже есть в npmjs
             - name: Ensure version is new on npmjs
               run: |
                   NAME=$(node -p "require('./package.json').name")
@@ -64,7 +62,6 @@ jobs:
                     exit 1
                   fi
 
-            # Достаём секцию из CHANGELOG.md для текущей версии → RELEASE_NOTES.md
             - name: Extract changelog section for this version
               id: notes
               shell: bash
@@ -87,7 +84,6 @@ jobs:
                   [ -s RELEASE_NOTES.md ] || { echo "❌ RELEASE_NOTES.md пуст — парсинг не удался"; exit 1; }
                   echo "found=true" >> "$GITHUB_OUTPUT"
 
-            # Точный тарбол, ушедший/идущий в реестры, плюс архивы
             - name: Create npm tarball
               run: |
                   PKG_TGZ=$(npm pack --silent)
@@ -98,13 +94,13 @@ jobs:
                   tar -czf dist.tgz dist
                   tar -czf docs.tgz docs || true
 
-            # 1) СОЗДАЁМ GITHUB RELEASE — это наш гейт
+            # ——— GITHUB RELEASE (гейт для публикаций) ———
             - name: Create GitHub Release (CHANGELOG section)
               id: gh_release
               continue-on-error: true
               uses: softprops/action-gh-release@v2
               with:
-                  tag_name: ${{ github.ref_name }} # vX.Y.Z
+                  tag_name: ${{ github.ref_name }}
                   name: ${{ github.ref_name }}
                   body_path: RELEASE_NOTES.md
                   prerelease: ${{ contains(github.ref_name, '-') }}
@@ -115,29 +111,43 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            # 2) Публикуем в npmjs — только если релиз создан
+            # ——— npmjs.org — публикуем только если релиз создан ———
             - name: Publish to npmjs (only if GH release succeeded)
               if: steps.gh_release.outcome == 'success'
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Automation token (publish)
-              run: npm publish --access public --provenance
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Automation token
+              run: npm publish --access public --provenance --ignore-scripts
 
-            # 3) Публикуем в GitHub Packages (npm.pkg.github.com) — тоже только если релиз создан
+            # ——— GitHub Packages — отдельный setup-node с переключением реестра ———
+            - name: Use Node 20 (GitHub Packages registry)
+              if: steps.gh_release.outcome == 'success'
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
+                  registry-url: https://npm.pkg.github.com
+                  scope: '@rotcetihra'
+                  always-auth: true
+
             - name: Publish to GitHub Packages (only if GH release succeeded)
               if: steps.gh_release.outcome == 'success'
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # встроенный токен, права даёт permissions.packages: write
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # хватает при permissions.packages: write
+              shell: bash
               run: |
+                  set -euo pipefail
                   NAME=$(node -p "require('./package.json').name")
                   VERSION=$(node -p "require('./package.json').version")
-                  # если версия уже есть в GH Packages, пропускаем
-                  if npm view "$NAME@$VERSION" version --registry=https://npm.pkg.github.com >/dev/null 2>&1; then
+
+                  echo "registry: $(npm config get registry)"
+                  echo "whoami: $(npm whoami)"
+
+                  if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
                     echo "::notice::$NAME@$VERSION уже есть в GitHub Packages — пропускаю публикацию."
                   else
-                    npm publish --registry=https://npm.pkg.github.com
+                    npm publish --ignore-scripts
                   fi
 
-            # Если релиз не создался — валим job и не публикуем никуда
+            # ——— Если релиз не создался — фейлим job и нигде не публикуем ———
             - name: Fail because GitHub Release failed
               if: steps.gh_release.outcome != 'success'
               run: |
