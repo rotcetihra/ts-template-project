@@ -74,14 +74,29 @@ jobs:
             - name: Generate docs
               run: npm run docs:build # Генерация TypeDoc в ./docs
 
+            - name: Inspect build output
+              run: |
+                  echo "=== tsc version ==="
+                  npx tsc -v
+                  echo "=== emitted files (tsc report) ==="
+                  npx tsc -p tsconfig.build.json --listFiles --listEmittedFiles || true
+                  echo "=== dist tree ==="
+                  if [ -d dist ]; then
+                      find dist -maxdepth 2 -type f -print
+                  else
+                      echo "dist/ отсутствует"
+                  fi
+
             - name: Upload dist
+              if: ${{ hashFiles('dist/**') != '' }} # грузим артефакт только если там хоть что-то есть
               uses: actions/upload-artifact@v4
               with:
-                  name: dist # Артефакт с результатом сборки
-                  path: dist # Папка, куда tsc положил JS/типовые декларации
+                  name: dist
+                  path: dist
 
             - name: Upload docs
+              if: ${{ hashFiles('docs/**') != '' }}
               uses: actions/upload-artifact@v4
               with:
-                  name: docs # Артефакт с документацией
-                  path: docs # Папка с HTML-доками TypeDoc
+                  name: docs
+                  path: docs
