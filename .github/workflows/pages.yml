@@ -1,0 +1,59 @@
+# .github/workflows/pages.yml
+name: Docs # Деплой сгенерированной TypeDoc-документации на GitHub Pages
+
+on:
+    workflow_run:
+        workflows: ['CI'] # Триггер: завершение workflow "CI"
+        types: [completed] # На любое завершение (успех/фейл)...
+        branches: [main] # ...только если CI бежал по main
+
+permissions:
+    contents: read # Читать репозиторий
+    actions: read # ВАЖНО: читать артефакты чужого workflow (CI)
+    pages: write # Писать в GitHub Pages
+    id-token: write # OIDC подпись деплоя (требует deploy-pages@v4)
+
+# Чтобы новые деплои отменяли старые
+concurrency:
+    group: pages
+    cancel-in-progress: true
+
+jobs:
+    deploy:
+        # Деплоим только если CI прошёл успешно
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        runs-on: ubuntu-latest
+
+        # Привязываем job к окружению Pages и публикуем URL билда в UI
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+
+        steps:
+            - name: Download docs artifact from CI
+              uses: actions/download-artifact@v4
+              with:
+                  # Имя артефакта, который собирает CI (см. шаг "Upload docs" в CI)
+                  name: docs
+                  # Куда распаковать
+                  path: ./docs
+                  # ВАЖНО: скачиваем артефакт из ТОГО запуска CI, который нас триггернул
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  run-id: ${{ github.event.workflow_run.id }}
+
+            - name: Ensure docs exist
+              run: |
+                  test -d ./docs || { echo "❌ Docs artifact not found"; exit 1; }
+                  echo "✅ Docs artifact ready"
+
+            # Готовит Pages к приёму артефакта (создаёт/проверяет служебные настройки)
+            - uses: actions/configure-pages@v5
+
+            # Упаковывает директорию ./docs как Pages-артефакт
+            - uses: actions/upload-pages-artifact@v3
+              with:
+                  path: ./docs
+
+            # Деплой на Pages; отдаёт page_url через outputs
+            - id: deployment
+              uses: actions/deploy-pages@v4
