@@ -1,0 +1,91 @@
+# .github/workflows/docs-versioned.yml
+name: Docs (versioned)
+
+on:
+    push:
+        tags: ['v*'] # каждый релиз-тег публикует свою версию док
+
+permissions:
+    contents: write
+
+jobs:
+    docs:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout source at tag
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Use Node 20
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
+                  cache: npm
+
+            - name: Install deps
+              run: npm ci
+
+            - name: Build docs
+              run: npm run docs:build
+
+            - name: Prepare gh-pages worktree
+              run: |
+                  git fetch origin gh-pages || true
+                  git worktree add --detach site origin/gh-pages || git worktree add -B gh-pages site
+                  cd site
+                  git checkout -B gh-pages || true
+                  touch .nojekyll   # иначе GitHub Pages отфильтрует некоторые файлы :contentReference[oaicite:3]{index=3}
+
+            - name: Put docs under /<version>, update versions.json and index
+              run: |
+                  set -euo pipefail
+                  VERSION="${GITHUB_REF_NAME#v}"
+                  MAJOR_MINOR="${VERSION%.*}"
+
+                  mkdir -p "site/${VERSION}"
+                  rsync -a --delete docs/ "site/${VERSION}/"
+
+                  # Обновляем список версий
+                  VERS_FILE="site/versions.json"
+                  if [ -f "$VERS_FILE" ]; then
+                    TMP=$(mktemp)
+                    jq --arg v "$VERSION" '([.[]] + [$v]) | unique | sort_by(. | split(".") | map(tonumber)) | reverse' "$VERS_FILE" > "$TMP" || echo '[]' > "$TMP"
+                    mv "$TMP" "$VERS_FILE"
+                  else
+                    printf '[ "%s" ]\n' "$VERSION" > "$VERS_FILE"
+                  fi
+
+                  # Пишем простой index.html с переключателем версий и редиректом на последнюю
+                  cat > site/index.html <<'HTML'
+                  <!doctype html><html lang="en"><meta charset="utf-8"/>
+                  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+                  <title>API Docs</title>
+                  <style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,sans-serif;padding:24px;max-width:900px;margin:0 auto}header{display:flex;justify-content:space-between;align-items:center;gap:16px}select{font:inherit;padding:6px 10px}</style>
+                  <header>
+                    <h1>@rotcetihra/ts-template-project — API Docs</h1>
+                    <label>Version <select id="ver"></select></label>
+                  </header>
+                  <hr/>
+                  <iframe id="frame" src="" style="width:100%;height:80vh;border:0"></iframe>
+                  <script>
+                  const sel = document.getElementById('ver'), frame=document.getElementById('frame');
+                  fetch('./versions.json').then(r=>r.json()).then(vs=>{
+                    // latest = первая в списке (мы заранее отсортировали по убыванию)
+                    const latest = vs[0];
+                    vs.forEach(v=>{
+                      const o = document.createElement('option');
+                      o.value = v; o.textContent = v; sel.appendChild(o);
+                    });
+                    const current = new URL(location).searchParams.get('v') || latest;
+                    sel.value = current;
+                    frame.src = `./${current}/index.html`;
+                    sel.addEventListener('change', ()=>{ location.search = '?v=' + sel.value; });
+                  });
+                  </script>
+                  HTML
+
+                  cd site
+                  git add -A
+                  git -c user.name="github-actions" -c user.email="actions@users.noreply.github.com" commit -m "docs: ${VERSION}" || echo "no changes"
+                  git push origin gh-pages

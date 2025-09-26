@@ -1,6 +1,6 @@
 {
     "name": "@rotcetihra/ts-template-project",
-    "version": "0.2.9",
+    "version": "0.2.10",
     "description": "Шаблонный преднастроенный TypeScript проект.",
     "keywords": [
         "template",
