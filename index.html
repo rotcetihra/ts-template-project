@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>API Docs</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,sans-serif;padding:24px;margin:0 auto}header{display:flex;justify-content:space-between;align-items:center;gap:16px}select{font:inherit;padding:6px 10px}</style>
+<header>
+  <h1>@rotcetihra/ts-template-project — API Docs</h1>
+  <label>Version <select id="ver"></select></label>
+</header>
+<hr/>
+<iframe id="frame" src="" style="width:100%;height:80vh;border:0"></iframe>
+<script>
+const sel = document.getElementById('ver'), frame=document.getElementById('frame');
+fetch('./versions.json').then(r=>r.json()).then(vs=>{
+  // latest = первая в списке (мы заранее отсортировали по убыванию)
+  const latest = vs[0];
+  vs.forEach(v=>{
+    const o = document.createElement('option');
+    o.value = v; o.textContent = v; sel.appendChild(o);
+  });
+  const current = new URL(location).searchParams.get('v') || latest;
+  sel.value = current;
+  frame.src = `./${current}/index.html`;
+  sel.addEventListener('change', ()=>{ location.search = '?v=' + sel.value; });
+});
+</script>
