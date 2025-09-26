@@ -1,0 +1,63 @@
+# .github/workflows/release.yml
+name: Release
+
+on:
+    push:
+        tags: ['v*.*.*'] # Публикуем только по тэгам вида vX.Y.Z
+
+permissions:
+    contents: read
+    id-token: write # Нужно, чтобы npm получил OIDC-подпись (provenance)
+
+jobs:
+    publish:
+        name: Publish to npm
+        runs-on: ubuntu-latest
+        env:
+            NODE_OPTIONS: --experimental-vm-modules # На случай ESM-истерик
+            CI: true
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Use Node 20
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
+                  registry-url: 'https://registry.npmjs.org/'
+                  cache: npm
+                  # Можно указать scope, чтобы npm знал, что публикуем scoped-пакет
+                  # scope: '@rotcetihra'
+                  always-auth: true # не пытайся публиковать анонимно
+
+            - name: Install deps
+              run: npm ci
+
+            # Опционально: прогоним тесты перед публикацией (меньше позора на реестре)
+            - name: Test
+              run: npm test
+
+            - name: Build
+              run: npm run src:build
+
+            # Прозрачная проверка: тег vX.Y.Z должен совпадать с package.json version
+            - name: Verify tag matches package.json version
+              run: |
+                  PKG_VERSION=$(node -p "require('./package.json').version")
+                  TAG_VERSION=${GITHUB_REF_NAME#v}
+                  echo "package.json: $PKG_VERSION; tag: $TAG_VERSION"
+                  if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
+                    echo "❌ Tag v$TAG_VERSION != package.json version $PKG_VERSION"
+                    exit 1
+                  fi
+
+            # Быстрый сухой прогон — покажет, что именно уйдёт в npm
+            - name: Pack (dry-run)
+              run: npm publish --access public --provenance --dry-run
+
+            # Публикуем. Без ручного ~/.npmrc: setup-node подставит NODE_AUTH_TOKEN,
+            # а id-token: write позволяет npm подписать релиз (provenance).
+            - name: Publish (public, with provenance)
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # automation token из npm (Settings → Access Tokens)
+              run: npm publish --access public --provenance

@@ -1,5 +1,5 @@
-import MyClass from '@/MyClass.mts';
-import Test from 'tests/TestHelper.mts';
+import MyClass from '@/MyClass.js';
+import Test from 'tests/TestHelper.js';
 
 describe('class MyClass', () => {
     test('существует и доступен', () => {
