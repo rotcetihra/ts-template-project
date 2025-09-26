@@ -69,20 +69,59 @@ jobs:
                   <hr/>
                   <iframe id="frame" src="" style="width:100%;height:80vh;border:0"></iframe>
                   <script>
-                  const sel = document.getElementById('ver'), frame=document.getElementById('frame');
-                  fetch('./versions.json').then(r=>r.json()).then(vs=>{
-                    // latest = первая в списке (мы заранее отсортировали по убыванию)
-                    const latest = vs[0];
-                    vs.forEach(v=>{
-                      const o = document.createElement('option');
-                      o.value = v; o.textContent = v; sel.appendChild(o);
-                    });
-                    const current = new URL(location).searchParams.get('v') || latest;
-                    sel.value = current;
-                    frame.src = `./${current}/index.html`;
-                    sel.addEventListener('change', ()=>{ location.search = '?v=' + sel.value; });
-                  });
-                  </script>
+                    (function () {
+                    const sel = document.getElementById('ver');
+                    const frame = document.getElementById('frame');
+
+                    // Простой semver-сравнитель: 1.10.0 > 1.2.9
+                    function cmp(a, b) {
+                        const pa = String(a).replace(/^v/, '').split('.').map(n => parseInt(n, 10) || 0);
+                        const pb = String(b).replace(/^v/, '').split('.').map(n => parseInt(n, 10) || 0);
+                        for (let i = 0; i < 3; i++) {
+                        if (pa[i] !== pb[i]) return pb[i] - pa[i];
+                        }
+                        return 0;
+                    }
+
+                    // Кэш-бастер: не даём GitHub Pages подсовывать старый файл
+                    fetch('./versions.json?ts=' + Date.now())
+                        .then(r => r.json())
+                        .then(list => {
+                        // Нормализуем массив версий
+                        const versions = (Array.isArray(list) ? list : [])
+                            .map(v => String(v).trim())
+                            .filter(Boolean)
+                            .sort(cmp);
+
+                        if (!versions.length) throw new Error('versions.json пустой');
+
+                        // Наполняем селект
+                        sel.innerHTML = '';
+                        for (const v of versions) {
+                            const o = document.createElement('option');
+                            o.value = v; o.textContent = v;
+                            sel.appendChild(o);
+                        }
+
+                        // Текущая версия из URL или последняя (максимальная)
+                        const urlV = new URL(location.href).searchParams.get('v');
+                        const current = versions.includes(urlV) ? urlV : versions[0];
+
+                        sel.value = current;
+                        frame.src = `./${current}/index.html`;
+
+                        sel.addEventListener('change', () => {
+                            const v = sel.value;
+                            // перезагружаем страницу с ?v=, чтобы была шаримая ссылка
+                            location.search = '?v=' + encodeURIComponent(v);
+                        });
+                        })
+                        .catch(e => {
+                        console.error('Не смог загрузить versions.json:', e);
+                        sel.replaceWith(document.createTextNode('Ошибка загрузки списка версий'));
+                        });
+                    })();
+                    </script>
                   HTML
 
                   cd site
