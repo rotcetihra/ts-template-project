@@ -3,18 +3,19 @@ name: Release
 
 on:
     push:
-        tags: ['v*.*.*'] # Публикуем только по тэгам вида vX.Y.Z
+        tags: ['v*'] # шире: сработает и для v1.2.3-rc.1
+    workflow_dispatch: {} # можно запустить руками из Actions
 
 permissions:
-    contents: read
-    id-token: write # Нужно, чтобы npm получил OIDC-подпись (provenance)
+    contents: write # нужно для создания GitHub Release
+    id-token: write # нужно для npm --provenance
 
 jobs:
     publish:
         name: Publish to npm
         runs-on: ubuntu-latest
         env:
-            NODE_OPTIONS: --experimental-vm-modules # На случай ESM-истерик
+            NODE_OPTIONS: --experimental-vm-modules
             CI: true
 
         steps:
@@ -26,21 +27,23 @@ jobs:
                   node-version: 20.x
                   registry-url: 'https://registry.npmjs.org/'
                   cache: npm
-                  # Можно указать scope, чтобы npm знал, что публикуем scoped-пакет
-                  # scope: '@rotcetihra'
-                  always-auth: true # не пытайся публиковать анонимно
+                  scope: '@rotcetihra'
+                  always-auth: true
 
             - name: Install deps
               run: npm ci
 
-            # Опционально: прогоним тесты перед публикацией (меньше позора на реестре)
+            # Тесты и сборка до публикации — ок, но избегаем дубля при npm publish
             - name: Test
               run: npm test
 
-            - name: Build
+            - name: Build (tsc)
               run: npm run src:build
 
-            # Прозрачная проверка: тег vX.Y.Z должен совпадать с package.json version
+            - name: Build docs (typedoc) # <— ДОБАВЛЕНО: чтобы docs.tgz не был пустым
+              run: npm run docs:build
+
+            # Тег должен совпадать с версией в package.json
             - name: Verify tag matches package.json version
               run: |
                   PKG_VERSION=$(node -p "require('./package.json').version")
@@ -51,13 +54,40 @@ jobs:
                     exit 1
                   fi
 
-            # Быстрый сухой прогон — покажет, что именно уйдёт в npm
+            # Что именно улетит в npm (и сработает ли provenance)
             - name: Pack (dry-run)
               run: npm publish --access public --provenance --dry-run
 
-            # Публикуем. Без ручного ~/.npmrc: setup-node подставит NODE_AUTH_TOKEN,
-            # а id-token: write позволяет npm подписать релиз (provenance).
+            # Публикуем без повторного прогона скриптов (чтобы не дублировать test/build)
+            # Если хочешь оставить prepublishOnly — убери флаг --ignore-scripts.
             - name: Publish (public, with provenance)
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # automation token из npm (Settings → Access Tokens)
-              run: npm publish --access public --provenance
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Automation token из npm
+              run: npm publish --access public --provenance --ignore-scripts
+
+            # Сохраняем тарбол ровно того, что опубликовали
+            - name: Create npm tarball
+              run: |
+                  PKG_TGZ=$(npm pack --silent)
+                  echo "PKG_TGZ=$PKG_TGZ" >> $GITHUB_ENV
+
+            # Упаковываем артефакты для GitHub Release
+            - name: Pack release assets
+              run: |
+                  tar -czf dist.tgz dist
+                  tar -czf docs.tgz docs || true
+
+            # Создаём GitHub Release и прикладываем файлы
+            - name: Create GitHub Release
+              uses: softprops/action-gh-release@v2
+              with:
+                  tag_name: ${{ github.ref_name }} # vX.Y.Z
+                  name: ${{ github.ref_name }}
+                  body_path: CHANGELOG.md
+                  prerelease: ${{ contains(github.ref_name, '-') }}
+                  files: |
+                      ${{ env.PKG_TGZ }}                          # <— настоящий npm-тарбол
+                      dist.tgz
+                      docs.tgz
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
