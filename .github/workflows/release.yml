@@ -3,16 +3,16 @@ name: Release
 
 on:
     push:
-        tags: ['v*'] # шире: сработает и для v1.2.3-rc.1
-    workflow_dispatch: {} # можно запустить руками из Actions
+        tags: ['v*'] # Любые теги, начинающиеся с v (включая пререлизы: v1.2.3-rc.1)
+    workflow_dispatch: {} # Возможность запустить вручную из Actions
 
 permissions:
-    contents: write # нужно для создания GitHub Release
-    id-token: write # нужно для npm --provenance
+    contents: write # Нужно, чтобы создать GitHub Release
+    id-token: write # Нужно для npm --provenance (OIDC подпись)
 
 jobs:
     publish:
-        name: Publish to npm
+        name: Publish to npm & Create GitHub Release
         runs-on: ubuntu-latest
         env:
             NODE_OPTIONS: --experimental-vm-modules
@@ -33,17 +33,16 @@ jobs:
             - name: Install deps
               run: npm ci
 
-            # Тесты и сборка до публикации — ок, но избегаем дубля при npm publish
             - name: Test
               run: npm test
 
             - name: Build (tsc)
               run: npm run src:build
 
-            - name: Build docs (typedoc) # <— ДОБАВЛЕНО: чтобы docs.tgz не был пустым
+            - name: Build docs (typedoc)
               run: npm run docs:build
 
-            # Тег должен совпадать с версией в package.json
+            # Тег vX.Y.Z обязан совпадать с package.json.version
             - name: Verify tag matches package.json version
               run: |
                   PKG_VERSION=$(node -p "require('./package.json').version")
@@ -54,77 +53,92 @@ jobs:
                     exit 1
                   fi
 
-            # Что именно улетит в npm (и сработает ли provenance)
+            # Ловим попытку переопубликовать ту же версию заранее (вместо E400 в конце)
+            - name: Ensure version is new on npm
+              run: |
+                  NAME=$(node -p "require('./package.json').name")
+                  VERSION=$(node -p "require('./package.json').version")
+                  if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+                    echo "❌ $NAME@$VERSION уже опубликован в npm. Подними версию и перезапусти."
+                    exit 1
+                  fi
+
+            # Сухой прогон — что именно уйдёт в npm, и что provenance работает
             - name: Pack (dry-run)
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
               run: npm publish --access public --provenance --dry-run
 
-            # Публикуем без повторного прогона скриптов (чтобы не дублировать test/build)
-            # Если хочешь оставить prepublishOnly — убери флаг --ignore-scripts.
+            # Публикуем в npm. Да, npm всё равно запустит prepare/prepublishOnly — это норма.
             - name: Publish (public, with provenance)
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Automation token из npm
-              run: npm publish --access public --provenance --ignore-scripts
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Automation token
+              run: npm publish --access public --provenance
 
-            # .github/workflows/release.yml (фрагмент с конца job)
-            # Сохраняем точный npm-тарбол (как уже делали)
+            # Точный тарбол, ушедший в npm
             - name: Create npm tarball
               run: |
                   PKG_TGZ=$(npm pack --silent)
                   echo "PKG_TGZ=$PKG_TGZ" >> $GITHUB_ENV
 
-            # ВЫТАЩИТЬ СЕКЦИЮ ИЗ CHANGELOG ДЛЯ ЭТОГО ТЕГА (vX.Y.Z -> X.Y.Z)
+            # Достаём секцию из CHANGELOG.md для текущей версии и кладём в RELEASE_NOTES.md
             - name: Extract changelog section for this version
               id: notes
               shell: bash
               run: |
+                  set -euo pipefail
                   VERSION="${GITHUB_REF_NAME#v}"
-                  if [ ! -f CHANGELOG.md ]; then
-                      echo "❌ CHANGELOG.md не найден"; exit 1
-                  fi
-                  node - <<'NODE' || true
-                  const fs = require('fs');
-                  const rawVersion = process.env.VERSION || '';
-                  const version = rawVersion.replace(/^v/, '');
-                  const md = fs.readFileSync('CHANGELOG.md','utf8');
-                  const lines = md.split(/\r?\n/);
-                  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-                  const isHeading = l => /^#{2,6}\s+/.test(l);
-                  // Матчим заголовки вида:
-                  // ## 1.2.3   | ## v1.2.3   | ## [1.2.3]   | ## [v1.2.3] - 2025-09-26  | со ссылками
-                  const re = new RegExp(`^\\[?v?${esc(version)}\\]?([\\s\\-\\]]|$)`, 'i');
-                  const start = lines.findIndex(l => isHeading(l) && re.test(l.replace(/^#{2,6}\s+/, '').trim()));
-                  if (start < 0) {
-                      process.exitCode = 2;
-                  } else {
-                      let end = start + 1;
-                      while (end < lines.length && !isHeading(lines[end])) end++;
-                      const out = lines.slice(start, end).join('\n').trim() + '\n';
-                      fs.writeFileSync('RELEASE_NOTES.md', out);
-                  }
-                  NODE
-                  if [ -s RELEASE_NOTES.md ]; then
-                      echo "found=true" >> $GITHUB_OUTPUT
-                  else
-                      echo "found=false" >> $GITHUB_OUTPUT
-                      echo "❌ В CHANGELOG.md нет секции для версии ${VERSION}"
-                      # Если хочешь фейлить релиз, раскомментируй:
-                      exit 1
-                  fi
-                  env:
-                  VERSION: ${{ github.ref_name }}
 
-            # Упаковываем артефакты
+                  if [ ! -f CHANGELOG.md ]; then
+                    echo "❌ CHANGELOG.md не найден"; exit 1
+                  fi
+
+                  # Экраним точки в версии: 0.2.2 → 0\.2\.2
+                  V_ESC="${VERSION//./\\.}"
+
+                  # Заголовки вида:
+                  #   ## 0.2.2
+                  #   ## v0.2.2
+                  #   ## [0.2.2]
+                  #   ## [v0.2.2] - 2025-09-26
+                  PATTERN="^##[[:space:]]+\\[?v?${V_ESC}\\]?([[:space:]]+[-–][[:space:]].*)?$"
+
+                  START="$(grep -n -E "$PATTERN" CHANGELOG.md | head -1 | cut -d: -f1 || true)"
+                  if [ -z "${START}" ]; then
+                    echo "❌ В CHANGELOG.md нет секции для версии ${VERSION}"
+                    echo "— Найденные заголовки:"
+                    grep -n -E '^##[[:space:]]+\[?v?[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md || true
+                    exit 1
+                  fi
+
+                  END="$(awk -v s="$START" 'NR>s && /^##[[:space:]]+/{print NR; exit}' CHANGELOG.md)"
+                  if [ -z "${END}" ]; then
+                    END="$(wc -l < CHANGELOG.md)"
+                    END=$((END + 1))
+                  fi
+
+                  sed -n "${START},$((END-1))p" CHANGELOG.md \
+                    | sed -e :a -e '/^\n*$/{$d;N;ba' \
+                    > RELEASE_NOTES.md
+
+                  if [ ! -s RELEASE_NOTES.md ]; then
+                    echo "❌ RELEASE_NOTES.md пуст — парсинг не удался"; exit 1
+                  fi
+
+                  echo "found=true" >> "$GITHUB_OUTPUT"
+
+            # Упаковываем артефакты для релиза
             - name: Pack release assets
               run: |
                   tar -czf dist.tgz dist
                   tar -czf docs.tgz docs || true
 
-            # Вариант 1: секция найдена — используем её как тело релиза
-            - name: Create GitHub Release (with CHANGELOG section)
+            # Создаём GitHub Release с телом из CHANGELOG
+            - name: Create GitHub Release (CHANGELOG section)
               if: steps.notes.outputs.found == 'true'
               uses: softprops/action-gh-release@v2
               with:
-                  tag_name: ${{ github.ref_name }}
+                  tag_name: ${{ github.ref_name }} # vX.Y.Z
                   name: ${{ github.ref_name }}
                   body_path: RELEASE_NOTES.md
                   prerelease: ${{ contains(github.ref_name, '-') }}
@@ -135,18 +149,5 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            # Вариант 2: секцию не нашли — можно fallback'нуть к autogenerated notes
-            - name: Create GitHub Release (auto notes fallback)
-              if: steps.notes.outputs.found != 'true'
-              uses: softprops/action-gh-release@v2
-              with:
-                  tag_name: ${{ github.ref_name }}
-                  name: ${{ github.ref_name }}
-                  generate_release_notes: true
-                  prerelease: ${{ contains(github.ref_name, '-') }}
-                  files: |
-                      ${{ env.PKG_TGZ }}
-                      dist.tgz
-                      docs.tgz
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            # На случай паранойи можно добавить fallback на автогенерацию (если выше вдруг упадёт),
+            # но мы осознанно фейлим релиз, если нет секции в CHANGELOG.
