@@ -3,8 +3,8 @@ name: Release
 
 on:
     push:
-        tags: ['v*'] # Любые теги, начинающиеся с v (включая пререлизы: v1.2.3-rc.1)
-    workflow_dispatch: {} # Возможность запустить вручную из Actions
+        tags: ['v*'] # Триггер по тэгам vX.Y.Z (включая пререлизы типа v1.2.3-rc.1)
+    workflow_dispatch: {} # Ручной запуск на случай твоей очередной «идеи»
 
 permissions:
     contents: write # Нужно, чтобы создать GitHub Release
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
     publish:
-        name: Publish to npm & Create GitHub Release
+        name: GitHub Release → npm publish (только если релиз ок)
         runs-on: ubuntu-latest
         env:
             NODE_OPTIONS: --experimental-vm-modules
@@ -53,7 +53,7 @@ jobs:
                     exit 1
                   fi
 
-            # Ловим попытку переопубликовать ту же версию заранее (вместо E400 в конце)
+            # Не тратим время на релиз, если такая версия уже есть в npm
             - name: Ensure version is new on npm
               run: |
                   NAME=$(node -p "require('./package.json').name")
@@ -63,25 +63,7 @@ jobs:
                     exit 1
                   fi
 
-            # Сухой прогон — что именно уйдёт в npm, и что provenance работает
-            - name: Pack (dry-run)
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-              run: npm publish --access public --provenance --dry-run
-
-            # Публикуем в npm. Да, npm всё равно запустит prepare/prepublishOnly — это норма.
-            - name: Publish (public, with provenance)
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Automation token
-              run: npm publish --access public --provenance
-
-            # Точный тарбол, ушедший в npm
-            - name: Create npm tarball
-              run: |
-                  PKG_TGZ=$(npm pack --silent)
-                  echo "PKG_TGZ=$PKG_TGZ" >> $GITHUB_ENV
-
-            # Достаём секцию из CHANGELOG.md для текущей версии и кладём в RELEASE_NOTES.md
+            # Секция из CHANGELOG.md для текущей версии → RELEASE_NOTES.md
             - name: Extract changelog section for this version
               id: notes
               shell: bash
@@ -93,14 +75,7 @@ jobs:
                     echo "❌ CHANGELOG.md не найден"; exit 1
                   fi
 
-                  # Экраним точки в версии: 0.2.2 → 0\.2\.2
                   V_ESC="${VERSION//./\\.}"
-
-                  # Заголовки вида:
-                  #   ## 0.2.2
-                  #   ## v0.2.2
-                  #   ## [0.2.2]
-                  #   ## [v0.2.2] - 2025-09-26
                   PATTERN="^##[[:space:]]+\\[?v?${V_ESC}\\]?([[:space:]]+[-–][[:space:]].*)?$"
 
                   START="$(grep -n -E "$PATTERN" CHANGELOG.md | head -1 | cut -d: -f1 || true)"
@@ -113,29 +88,31 @@ jobs:
 
                   END="$(awk -v s="$START" 'NR>s && /^##[[:space:]]+/{print NR; exit}' CHANGELOG.md)"
                   if [ -z "${END}" ]; then
-                    END="$(wc -l < CHANGELOG.md)"
-                    END=$((END + 1))
+                    END="$(wc -l < CHANGELOG.md)"; END=$((END + 1))
                   fi
 
                   sed -n "${START},$((END-1))p" CHANGELOG.md \
-                    | sed -e :a -e '/^\n*$/{$d;N;ba' \
-                    > RELEASE_NOTES.md
+                    | sed -e :a -e '/^\n*$/{$d;N;ba' > RELEASE_NOTES.md
 
-                  if [ ! -s RELEASE_NOTES.md ]; then
-                    echo "❌ RELEASE_NOTES.md пуст — парсинг не удался"; exit 1
-                  fi
+                  [ -s RELEASE_NOTES.md ] || { echo "❌ RELEASE_NOTES.md пуст"; exit 1; }
 
                   echo "found=true" >> "$GITHUB_OUTPUT"
 
-            # Упаковываем артефакты для релиза
+            # Готовим вложения к релизу (dist, docs, плюс точный npm-тарбол)
+            - name: Create npm tarball
+              run: |
+                  PKG_TGZ=$(npm pack --silent)
+                  echo "PKG_TGZ=$PKG_TGZ" >> $GITHUB_ENV
+
             - name: Pack release assets
               run: |
                   tar -czf dist.tgz dist
                   tar -czf docs.tgz docs || true
 
-            # Создаём GitHub Release с телом из CHANGELOG
+            # СОЗДАНИЕ GITHUB RELEASE — КЛЮЧЕВОЙ ГЕЙТ
             - name: Create GitHub Release (CHANGELOG section)
-              if: steps.notes.outputs.found == 'true'
+              id: gh_release
+              continue-on-error: true # не обрываем job сразу — нам нужно пропустить npm шаг
               uses: softprops/action-gh-release@v2
               with:
                   tag_name: ${{ github.ref_name }} # vX.Y.Z
@@ -149,5 +126,16 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            # На случай паранойи можно добавить fallback на автогенерацию (если выше вдруг упадёт),
-            # но мы осознанно фейлим релиз, если нет секции в CHANGELOG.
+            # ПУБЛИКУЕМ В NPM ТОЛЬКО ЕСЛИ РЕЛИЗ СОЗДАЛСЯ УСПЕШНО
+            - name: Publish to npm (only if GH release succeeded)
+              if: steps.gh_release.outcome == 'success'
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Automation token
+              run: npm publish --access public --provenance
+
+            # Если релиз не создался — явно валим job, чтобы всё было честно
+            - name: Fail because GitHub Release failed
+              if: steps.gh_release.outcome != 'success'
+              run: |
+                  echo "❌ GitHub Release не создан — публикацию в npm пропустили."
+                  exit 1
