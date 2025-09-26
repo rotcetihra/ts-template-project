@@ -39,6 +39,13 @@ jobs:
             - name: Install deps (clean)
               run: npm ci # Чистая установка зависимостей из lock-файла
 
+            - name: Lint
+              run: npm run lint -- --max-warnings=0 # падаем и на предупреждениях
+
+            # Опционально, но полезно: быстрый type-check без генерации файлов
+            - name: Type check
+              run: npx tsc -p tsconfig.json --noEmit
+
             - name: Run tests
               run: npm test -- --coverage # Запуск Jest; второй «--» передаёт флаги внутрь Jest
 
