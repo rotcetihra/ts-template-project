@@ -1,0 +1,43 @@
+{
+    "name": "@rotcetihra/ts-template-project",
+    "version": "0.5.0",
+    "description": "Шаблонный преднастроенный TypeScript проект.",
+    "keywords": [
+        "template",
+        "project",
+        "ts",
+        "typescript"
+    ],
+    "type": "module",
+    "homepage": "https://github.com/rotcetihra/ts-template-project/#readme",
+    "bugs": "https://github.com/rotcetihra/ts-template-project/issues",
+    "license": "MIT",
+    "author": {
+        "name": "Arhitector",
+        "email": "rotcetihra@mail.ru",
+        "url": "https://github.com/rotcetihra"
+    },
+    "files": [
+        "README.md"
+    ],
+    "exports": {
+        "./package.json": "./package.json"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/rotcetihra/ts-template-project.git"
+    },
+    "scripts": {
+
+    },
+    "devDependencies": {
+        
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "sideEffects": false,
+    "publishConfig": {
+        "access": "public"
+    }
+}
