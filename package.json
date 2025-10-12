@@ -29,9 +29,13 @@
     },
     "scripts": {
         "format": "prettier -w .",
-        "format:check": "prettier -c ."
+        "format:check": "prettier -c .",
+        "spell:check": "cspell lint ."
     },
     "devDependencies": {
+        "@cspell/dict-en_us": "^4.4.19",
+        "@cspell/dict-ru_ru": "^2.3.2",
+        "cspell": "^9.2.1",
         "prettier": "^3.6.2"
     },
     "engines": {
