@@ -28,10 +28,11 @@
         "url": "git+https://github.com/rotcetihra/ts-template-project.git"
     },
     "scripts": {
-
+        "format": "prettier -w .",
+        "format:check": "prettier -c ."
     },
     "devDependencies": {
-        
+        "prettier": "^3.6.2"
     },
     "engines": {
         "node": ">=18"
