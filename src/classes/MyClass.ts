@@ -161,13 +161,6 @@ class MyClass implements MyContract {
     public legacyProperty = 123;
 
     /**
-     * Приватное поле.
-     *
-     * @private
-     */
-    private secret = 'hidden';
-
-    /**
      * Защищённое поле.
      *
      * @protected
@@ -190,8 +183,6 @@ class MyClass implements MyContract {
         if (init?.property !== undefined) {
             this.property = init.property;
         }
-
-        this.secret;
     }
 
     // ---------------------------- ЭКЗЕМПЛЯР: МЕТОДЫ ----------------------------
@@ -258,7 +249,7 @@ class MyClass implements MyContract {
      * new MyClass().firstItem([]);      // undefined
      * ```
      */
-    public firstItem<T>(items: T[]): T | undefined {
+    public firstItem<T>(items: Array<T>): T | undefined {
         return items[0];
     }
 

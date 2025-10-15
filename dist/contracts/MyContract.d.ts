@@ -15,7 +15,7 @@
  * ```
  */
 interface MyContract {
-    doSomething(param1: string, param2: number): void;
+    doSomething: (param1: string, param2: number) => void;
     property: string;
 }
 export type { MyContract };

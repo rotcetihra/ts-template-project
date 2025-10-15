@@ -5,7 +5,6 @@
  * @abstract
  * @category Абстракции
  */
-class AbstractBase {
-}
+class AbstractBase {}
 export default AbstractBase;
 //# sourceMappingURL=AbstractBase.js.map

@@ -38,7 +38,7 @@ declare class MyClass implements MyContract {
      * @defaultValue "1.0.0"
      * @since 0.1.0
      */
-    static readonly VERSION: "1.0.0";
+    static readonly VERSION: '1.0.0';
     /**
      * Создаёт новый экземпляр с начальными значениями.
      *
@@ -99,12 +99,6 @@ declare class MyClass implements MyContract {
      * @throws {MyClassValidationError} Если передано пустое значение.
      */
     set property(val: string);
-    /**
-     * Приватное поле.
-     *
-     * @private
-     */
-    private secret;
     /**
      * Защищённое поле.
      *
@@ -172,7 +166,7 @@ declare class MyClass implements MyContract {
      * new MyClass().firstItem([]);      // undefined
      * ```
      */
-    firstItem<T>(items: T[]): T | undefined;
+    firstItem<T>(items: Array<T>): T | undefined;
     /**
      * Преобразует состояние экземпляра в объект {@link MyContract}.
      *

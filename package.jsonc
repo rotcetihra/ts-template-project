@@ -88,6 +88,14 @@
         "format:check": "prettier -c .",
         // Проверка орфографии кода и документации (CSpell)
         "spell:check": "cspell lint .",
+        // Базовый линт всех файлов
+        "lint": "eslint .",
+        // Линт с автоисправлениями
+        "lint:fix": "eslint . --fix",
+        // Строгий режим: ноль предупреждений
+        "lint:strict": "eslint . --max-warnings=0",
+        // Печать итоговой конфигурации ESLint для конкретного файла (диагностика)
+        "lint:print": "eslint --print-config src/index.ts",
         // Очистить артефакты сборки и кэш TypeScript
         "src:clean": "rimraf dist .tsbuildinfo",
         // Полная сборка исходников в dist
@@ -102,16 +110,26 @@
         "@cspell/dict-en_us": "^4.4.19",
         // Русский словарь для CSpell
         "@cspell/dict-ru_ru": "^2.3.2",
-        // Типы Node.js для TypeScript (объявления глобалей и API)
+        // Базовая конфигурация правил для JS (официальный пакет)
+        "@eslint/js": "^9.37.0",
+        // Типы Node.js для TypeScript (объявления глобальных переменных и API)
         "@types/node": "^24.7.2",
         // CLI/движок CSpell
         "cspell": "^9.2.1",
+        // ESLint — основной линтер
+        "eslint": "^9.37.0",
+        // Набор отключений правил, мешающих Prettier
+        "eslint-config-prettier": "^10.1.8",
+        // Наборы глобальных переменных для разных сред (Node, браузер, Jest и т. д.)
+        "globals": "^16.4.0",
         // Форматтер кода
         "prettier": "^3.6.2",
         // Кроссплатформенное удаление файлов/папок
         "rimraf": "^6.0.1",
         // Компилятор TypeScript
         "typescript": "^5.9.3",
+        // Плагины и синтаксический анализатор для ESLint с поддержкой TypeScript и режима с типами
+        "typescript-eslint": "^8.46.1",
     },
 
     // Минимально поддерживаемая версия Node.js

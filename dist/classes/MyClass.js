@@ -1,5 +1,5 @@
 // src/classes/MyClass.ts
-import { MyClassValidationError, } from '@/index.js';
+import { MyClassValidationError } from '@/index.js';
 /**
  * Пакет с примерами документации.
  *
@@ -68,7 +68,9 @@ class MyClass {
      */
     static fromJSON(data) {
         if (!data || typeof data.property !== 'string') {
-            throw new MyClassValidationError('Invalid data for MyClass.fromJSON');
+            throw new MyClassValidationError(
+                'Invalid data for MyClass.fromJSON',
+            );
         }
         return new MyClass({ property: data.property });
     }
@@ -85,10 +87,12 @@ class MyClass {
      */
     static isMyContract(value) {
         const v = value;
-        return (!!v &&
+        return (
+            !!v &&
             typeof v === 'object' &&
             typeof v.property === 'string' &&
-            typeof v.doSomething === 'function');
+            typeof v.doSomething === 'function'
+        );
     }
     /**
      * Устаревшая фабрика.
@@ -125,7 +129,9 @@ class MyClass {
      */
     set property(val) {
         if (typeof val !== 'string' || val.trim() === '') {
-            throw new MyClassValidationError('property must be a non-empty string');
+            throw new MyClassValidationError(
+                'property must be a non-empty string',
+            );
         }
         this._property = val;
     }
@@ -136,12 +142,6 @@ class MyClass {
      * @internal
      */
     legacyProperty = 123;
-    /**
-     * Приватное поле.
-     *
-     * @private
-     */
-    secret = 'hidden';
     /**
      * Защищённое поле.
      *
@@ -163,7 +163,6 @@ class MyClass {
         if (init?.property !== undefined) {
             this.property = init.property;
         }
-        this.secret;
     }
     // ---------------------------- ЭКЗЕМПЛЯР: МЕТОДЫ ----------------------------
     /**
@@ -189,7 +188,9 @@ class MyClass {
      */
     doSomething(param1, param2) {
         if (typeof param1 !== 'string' || !Number.isFinite(param2)) {
-            throw new MyClassValidationError('Invalid arguments for doSomething');
+            throw new MyClassValidationError(
+                'Invalid arguments for doSomething',
+            );
         }
         return { param1, param2 };
     }
@@ -247,7 +248,7 @@ class MyClass {
      * @internal
      */
     /* eslint-disable @typescript-eslint/no-empty-function */
-    internalHelper() { }
+    internalHelper() {}
 }
 export default MyClass;
 //# sourceMappingURL=MyClass.js.map
