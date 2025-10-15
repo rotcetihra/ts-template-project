@@ -1,0 +1,1 @@
+{"version":3,"file":"MyClassValidationError.js","sourceRoot":"","sources":["../../src/errors/MyClassValidationError.ts"],"names":[],"mappings":"AAAA,uCAAuC;AAEvC;;;;;GAKG;AACH,MAAM,sBAAuB,SAAQ,SAAS;IAC1C;;;OAGG;IACH,YAAY,OAAe;QACvB,KAAK,CAAC,OAAO,CAAC,CAAC;QACf,IAAI,CAAC,IAAI,GAAG,wBAAwB,CAAC;IACzC,CAAC;CACJ;AAED,eAAe,sBAAsB,CAAC"}

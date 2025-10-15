@@ -1,0 +1,103 @@
+// tsconfig.base.json
+//
+// ----------------------------------------------------------------------------
+//                                   ОПИСАНИЕ
+// ----------------------------------------------------------------------------
+// Базовая конфигурация TypeScript, общая для всего проекта. Определяет:
+//   • целевую версию языка и набор стандартных библиотек;
+//   • модель модулей (NodeNext) и правила их разрешения;
+//   • строгие проверки типов и параметры совместимости;
+//   • общие правила разрешения путей (baseUrl/paths) и глобальные типы.
+// Расширяется:
+//   • tsconfig.json — конфиг для IDE и локальной разработки;
+//   • tsconfig.build.json — конфиг для сборки.
+// ----------------------------------------------------------------------------
+{
+    "compilerOptions": {
+        // Целевая версия вывода JS
+        "target": "ES2022",
+
+        // Набор библиотек типов (добавьте "DOM" для браузера)
+        "lib": ["ES2022"],
+
+        // Глобальные типы окружения (переопределяйте в дочерних, если нужно)
+        "types": ["node"],
+
+        // Генерация модулей под Node ESM/CJS
+        "module": "NodeNext",
+
+        // Разрешение модулей согласно Node ESM/CJS
+        "moduleResolution": "NodeNext",
+
+        // Каждый файл трактуется как модуль (удобно для изолированной компиляции)
+        "moduleDetection": "force",
+
+        // Включить весь набор строгих проверок
+        "strict": true,
+
+        // Опциональные свойства без неявного undefined
+        "exactOptionalPropertyTypes": true,
+
+        // Индексный доступ даёт значение | undefined
+        "noUncheckedIndexedAccess": true,
+
+        // Переменные в catch имеют тип unknown
+        "useUnknownInCatchVariables": true,
+
+        // Требовать override при переопределении
+        "noImplicitOverride": true,
+
+        // Запрет неявного индексного доступа
+        "noPropertyAccessFromIndexSignature": true,
+
+        // Защита от «проваливания» в switch
+        "noFallthroughCasesInSwitch": true,
+
+        // Требовать явный return во всех ветках
+        "noImplicitReturns": true,
+
+        // Подсветка неиспользуемых локальных
+        "noUnusedLocals": true,
+
+        // Подсветка неиспользуемых аргументов
+        "noUnusedParameters": true,
+
+        // Совместимость с инструментами сборки и запуска (Vite, ts-node)
+        "isolatedModules": true,
+
+        // Пропуск проверки типов в *.d.ts (ускоряет сборку)
+        "skipLibCheck": true,
+
+        // Проще импортировать CJS из ESM
+        "esModuleInterop": true,
+
+        // Разрешить синтетические default-импорты
+        "allowSyntheticDefaultImports": true,
+
+        // Импорт JSON как модуль
+        "resolveJsonModule": true,
+
+        // Сохранять исходные import/export без преобразований
+        "verbatimModuleSyntax": true,
+
+        // Семантика полей классов по спецификации
+        "useDefineForClassFields": true,
+
+        // Следить за регистром имён файлов
+        "forceConsistentCasingInFileNames": true,
+
+        // Не генерировать файлы при ошибках типов
+        "noEmitOnError": true,
+
+        // База для неотносительных импортов
+        "baseUrl": ".",
+
+        // Сопоставление псевдонимов путей
+        "paths": {
+            // Импорт "@/..." указывает на src
+            "@/*": ["src/*"],
+            // Импорт "tests/..." указывает на tests
+            "tests/*": ["tests/*"]
+        }
+    }
+}
