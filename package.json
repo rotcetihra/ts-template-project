@@ -46,19 +46,27 @@
         "lint:print": "eslint --print-config src/index.ts",
         "src:clean": "rimraf dist .tsbuildinfo",
         "src:build": "npm run src:clean && tsc -p tsconfig.build.json",
-        "src:check": "tsc -p tsconfig.json --noEmit"
+        "src:check": "tsc -p tsconfig.json --noEmit",
+        "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+        "test:watch": "npm run test -- --watch",
+        "test:ci": "npm test -- --ci --coverage",
+        "test:changed": "npm test -- --onlyChanged"
     },
     "devDependencies": {
         "@cspell/dict-en_us": "^4.4.19",
         "@cspell/dict-ru_ru": "^2.3.2",
         "@eslint/js": "^9.37.0",
+        "@types/jest": "^30.0.0",
         "@types/node": "^24.7.2",
         "cspell": "^9.2.1",
         "eslint": "^9.37.0",
         "eslint-config-prettier": "^10.1.8",
         "globals": "^16.4.0",
+        "jest": "^30.2.0",
         "prettier": "^3.6.2",
         "rimraf": "^6.0.1",
+        "ts-jest": "^29.4.5",
+        "ts-jest-resolver": "^2.0.1",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.46.1"
     },
