@@ -1,0 +1,778 @@
+<!doctype html>
+<html class="default" lang="en" data-base="../">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="IE=edge" />
+        <title>
+            Подробная настройка TypeDoc | @rotcetihra/ts-template-project -
+            v0.5.0
+        </title>
+        <meta
+            name="description"
+            content="Documentation for @rotcetihra/ts-template-project" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="../assets/style.css" />
+        <link rel="stylesheet" href="../assets/highlight.css" />
+        <script defer src="../assets/main.js"></script>
+        <script async src="../assets/icons.js" id="tsd-icons-script"></script>
+        <script async src="../assets/search.js" id="tsd-search-script"></script>
+        <script
+            async
+            src="../assets/navigation.js"
+            id="tsd-nav-script"></script>
+        <script
+            async
+            src="../assets/hierarchy.js"
+            id="tsd-hierarchy-script"></script>
+        <link rel="stylesheet" href="../assets/typedoc-github-style.css" />
+    </head>
+    <body>
+        <script>
+            document.documentElement.dataset.theme =
+                localStorage.getItem('tsd-theme') || 'os';
+            document.body.style.display = 'none';
+            setTimeout(
+                () =>
+                    window.app ?
+                        app.showPage()
+                    :   document.body.style.removeProperty('display'),
+                500,
+            );
+        </script>
+        <header class="tsd-page-toolbar">
+            <div class="tsd-toolbar-contents container">
+                <a
+                    href="https://github.com/rotcetihra/ts-template-project"
+                    class="title"
+                    >@rotcetihra/ts-template-project - v0.5.0</a
+                >
+                <div id="tsd-toolbar-links">
+                    <a href="https://github.com/rotcetihra/ts-template-project"
+                        >GitHub</a
+                    >
+                </div>
+                <button
+                    id="tsd-search-trigger"
+                    class="tsd-widget"
+                    aria-label="Search">
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true">
+                        <use href="../assets/icons.svg#icon-search"></use>
+                    </svg>
+                </button>
+                <dialog id="tsd-search" aria-label="Search">
+                    <input
+                        role="combobox"
+                        id="tsd-search-input"
+                        aria-controls="tsd-search-results"
+                        aria-autocomplete="list"
+                        aria-expanded="true"
+                        autocapitalize="off"
+                        autocomplete="off"
+                        placeholder="Search the docs"
+                        maxlength="100" />
+                    <ul role="listbox" id="tsd-search-results"></ul>
+                    <div
+                        id="tsd-search-status"
+                        aria-live="polite"
+                        aria-atomic="true">
+                        <div>Preparing search index...</div>
+                    </div>
+                </dialog>
+                <a
+                    href="#"
+                    class="tsd-widget menu"
+                    id="tsd-toolbar-menu-trigger"
+                    data-toggle="menu"
+                    aria-label="Menu"
+                    ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true">
+                        <use href="../assets/icons.svg#icon-menu"></use></svg
+                ></a>
+            </div>
+        </header>
+        <div class="container container-main">
+            <div class="col-content">
+                <div class="tsd-page-title">
+                    <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+                        <li>
+                            <a href="" aria-current="page"
+                                >Подробная настройка TypeDoc</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class="tsd-panel tsd-typography">
+                    <h1
+                        id="руководство-по-настройке-typedoc"
+                        class="tsd-anchor-link">
+                        Руководство по настройке <strong>TypeDoc</strong
+                        ><a
+                            href="#руководство-по-настройке-typedoc"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h1>
+                    <p>
+                        <strong>Назначение:</strong> пошаговая инструкция для
+                        адаптации преднастроенного TypeDoc под ваш проект.
+                        Конфигурация уже работает; требуется обновить только
+                        отдельные параметры.
+                    </p>
+                    <hr />
+                    <h2 id="предварительные-условия" class="tsd-anchor-link">
+                        Предварительные условия<a
+                            href="#предварительные-условия"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>В проекте должны присутствовать:</p>
+                    <ul>
+                        <li>
+                            <code>typedoc.json</code> — конфигурация TypeDoc
+                            (обновлённая, см. ниже).
+                        </li>
+                        <li>
+                            <code>tsconfig.build.json</code> — сборочная
+                            конфигурация TypeScript с
+                            <code>declaration: true</code> и
+                            <code>declarationMap: true</code>.
+                        </li>
+                        <li>
+                            <code>src/index.ts</code> — вход публичного API.
+                        </li>
+                        <li>
+                            <code>README.md</code> — главная страница
+                            документации.
+                        </li>
+                        <li>
+                            Каталог <code>manuals/</code> — для пользовательских
+                            руководств в формате Markdown (если используются).
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="метаданные-проекта-и-выходные-артефакты"
+                        class="tsd-anchor-link">
+                        Метаданные проекта и выходные артефакты<a
+                            href="#метаданные-проекта-и-выходные-артефакты"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        В <code>typedoc.json</code> обновите сведения, видимые в
+                        интерфейсе:
+                    </p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;@your-scope/your-library&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;out&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;docs&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;readme&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;README.md&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;includeVersion&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;cleanOutputDir&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;hideGenerator&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;titleLink&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;https://github.com/&lt;org&gt;/&lt;repo&gt;&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <ul>
+                        <li><code>name</code> — имя пакета в шапке.</li>
+                        <li>
+                            <code>titleLink</code> — переход по клику на
+                            заголовок (обычно на репозиторий).
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="входные-точки-и-интеграция-с-typescript"
+                        class="tsd-anchor-link">
+                        Входные точки и интеграция с TypeScript<a
+                            href="#входные-точки-и-интеграция-с-typescript"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>Проверьте настройки входа и связку с TS:</p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;entryPoints&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;src/index.ts&quot;</span><span class="hl-0">],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;entryPointStrategy&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;resolve&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;tsconfig&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;tsconfig.build.json&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;alwaysCreateEntryPointModule&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;useTsLinkResolution&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <ul>
+                        <li>
+                            <code>entryPoints</code>/<code
+                                >entryPointStrategy</code
+                            >
+                            — документируется только то, что реэкспортировано из
+                            <code>src/index.ts</code>.
+                        </li>
+                        <li>
+                            <code>alwaysCreateEntryPointModule</code> —
+                            стабилизирует структуру сайта, особенно при наличии
+                            внешних документов.
+                        </li>
+                        <li>
+                            <code>useTsLinkResolution</code> — корректное
+                            разрешение <code>{@link ...}</code> в комментариях
+                            по правилам TS.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="ссылки-на-исходники" class="tsd-anchor-link">
+                        Ссылки на исходники<a
+                            href="#ссылки-на-исходники"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Включите кликабельные переходы к строкам исходного кода:
+                    </p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;gitRevision&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;HEAD&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;sourceLinkTemplate&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;https://github.com/&lt;org&gt;/&lt;repo&gt;/blob/{gitRevision}/{path}#L{line}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;sourceLinkExternal&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;displayBasePath&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;src&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <ul>
+                        <li>
+                            <code>gitRevision</code> — используйте
+                            <code>HEAD</code> или релизный тег (рекомендуется в
+                            CI).
+                        </li>
+                        <li>
+                            <code>displayBasePath</code> — сокращает
+                            отображаемые пути в UI до относительных от
+                            <code>src</code>.
+                        </li>
+                        <li>
+                            <code>sourceLinkExternal</code> — помечает ссылки
+                            как внешние.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="отбор-содержимого-и-фильтрация"
+                        class="tsd-anchor-link">
+                        Отбор содержимого и фильтрация<a
+                            href="#отбор-содержимого-и-фильтрация"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Поддерживайте в документации только публичные,
+                        задокументированные элементы:
+                    </p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;excludeExternals&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;excludePrivate&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;excludeProtected&quot;</span><span class="hl-0">: </span><span class="hl-4">false</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;excludeInternal&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;excludeNotDocumented&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;exclude&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/*.spec.ts&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/*.test.ts&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/__tests__/**&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/__mocks__/**&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/fixtures/**&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/examples/**&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/scripts/**&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <ul>
+                        <li>
+                            При необходимости временно ослабьте политику,
+                            установив
+                            <code>&quot;excludeNotDocumented&quot;: false</code
+                            >.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="организация-навигации-и-порядок-отображения"
+                        class="tsd-anchor-link">
+                        Организация навигации и порядок отображения<a
+                            href="#организация-навигации-и-порядок-отображения"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Фиксируйте логическую структуру разделов и стабильную
+                        сортировку:
+                    </p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;categorizeByGroup&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;defaultCategory&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;Misc&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;categoryOrder&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;Core&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;Builders&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;Utils&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;Types&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;Experimental&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;Misc&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;sort&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;documents-first&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;kind&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;alphabetical&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;source-order&quot;</span><span class="hl-0">],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;navigationLinks&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;GitHub&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;https://github.com/&lt;org&gt;/&lt;repo&gt;&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    },</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <ul>
+                        <li>
+                            <code>documents-first</code> — страницы-мануалы
+                            отображаются выше API.
+                        </li>
+                        <li>
+                            <code>navigationLinks</code> — ссылки в верхнем
+                            меню.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="тема-плагины-и-видимость-в-интерфейсе"
+                        class="tsd-anchor-link">
+                        Тема, плагины и видимость в интерфейсе<a
+                            href="#тема-плагины-и-видимость-в-интерфейсе"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>Оформление и стартовые фильтры UI:</p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;theme&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;typedoc-github-theme&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;plugin&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;typedoc-github-theme&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;typedoc-plugin-mdn-links&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;typedoc-plugin-rename-defaults&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;visibilityFilters&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;protected&quot;</span><span class="hl-0">: </span><span class="hl-4">false</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;private&quot;</span><span class="hl-0">: </span><span class="hl-4">false</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;inherited&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;external&quot;</span><span class="hl-0">: </span><span class="hl-4">false</span><span class="hl-0">,</span><br/><span class="hl-0">    },</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <hr />
+                    <h2
+                        id="внешние-руководства-и-поиск"
+                        class="tsd-anchor-link">
+                        Внешние руководства и поиск<a
+                            href="#внешние-руководства-и-поиск"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Подключите собственные руководства (Markdown) и
+                        индексацию:
+                    </p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;projectDocuments&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;manuals/*.md&quot;</span><span class="hl-0">],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;searchInDocuments&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;searchInComments&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>Рекомендации для файлов в <code>manuals/</code>:</p>
+                    <ul>
+                        <li>
+                            <p>
+                                Добавляйте фронтматтер для заголовка и
+                                группировки:
+                            </p>
+                            <pre><code class="md"><span class="hl-0">---</span><br/><span class="hl-7">title</span><span class="hl-0">: </span><span class="hl-5">Подробная настройка TypeDoc</span><br/><span class="hl-7">group</span><span class="hl-0">: </span><span class="hl-5">Руководства</span><br/><span class="hl-7">category</span><span class="hl-0">: </span><span class="hl-5">Guides</span><br/><span class="hl-0">---</span>
+</code><button type="button">Copy</button></pre>
+                        </li>
+                        <li>
+                            <p>
+                                После первой сборки откройте
+                                <code>docs/</code> и уточните фактический URL
+                                страницы. Если требуется, синхронизируйте его с
+                                <code>navigationLinks.Guides</code>.
+                            </p>
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="подсветка-синтаксиса" class="tsd-anchor-link">
+                        Подсветка синтаксиса<a
+                            href="#подсветка-синтаксиса"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>Включите необходимые языки и темы подсветки:</p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;highlightLanguages&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;md&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;markdown&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;ts&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;js&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;json&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;jsonc&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;bash&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;sh&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;yaml&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;yml&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;text&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;lightHighlightTheme&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;github-light&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;darkHighlightTheme&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;github-dark&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <ul>
+                        <li>
+                            Для Markdown используйте обозначения
+                            <code>md или </code>markdown.
+                        </li>
+                        <li>
+                            При необходимости добавляйте другие алиасы
+                            (например, <code>toml</code>, <code>ini</code>).
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="валидация-и-поведение-сборки"
+                        class="tsd-anchor-link">
+                        Валидация и поведение сборки<a
+                            href="#валидация-и-поведение-сборки"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>Настройки контроля качества:</p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;validation&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;notExported&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;invalidLink&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;notDocumented&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    },</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;treatWarningsAsErrors&quot;</span><span class="hl-0">: </span><span class="hl-4">false</span><span class="hl-0">,</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <ul>
+                        <li>
+                            В CI можно усилить политику, установив
+                            <code>&quot;treatWarningsAsErrors&quot;: true</code>
+                            и фиксированный <code>gitRevision</code> на релизный
+                            тег.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="сборка-и-локальная-проверка"
+                        class="tsd-anchor-link">
+                        Сборка и локальная проверка<a
+                            href="#сборка-и-локальная-проверка"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>Добавьте (или используйте готовые) скрипты:</p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;scripts&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;docs:build&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;typedoc --options typedoc.json&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;docs:serve&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;npx http-server docs -o -c-1&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    },</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <ul>
+                        <li>Сборка: <code>npm run docs:build</code></li>
+                        <li>Просмотр: <code>npm run docs:serve</code></li>
+                    </ul>
+                    <p>Проверьте:</p>
+                    <ul>
+                        <li>корректность ссылок на исходники,</li>
+                        <li>наличие раздела с руководствами,</li>
+                        <li>работу поиска по комментариям и документам,</li>
+                        <li>подсветку блоков <code>md/</code>markdown.</li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="контрольный-список-изменений-короткая-версия"
+                        class="tsd-anchor-link">
+                        Контрольный список изменений (короткая версия)<a
+                            href="#контрольный-список-изменений-короткая-версия"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ol>
+                        <li>
+                            Обновить <code>name</code>, <code>titleLink</code>,
+                            <code>navigationLinks</code>.
+                        </li>
+                        <li>
+                            Задать <code>gitRevision</code>,
+                            <code>sourceLinkTemplate</code>,
+                            <code>sourceLinkExternal</code>,
+                            <code>displayBasePath</code>.
+                        </li>
+                        <li>
+                            Проверить вход API и TS-связку:
+                            <code>entryPoints</code>,
+                            <code>entryPointStrategy</code>,
+                            <code>tsconfig</code>,
+                            <code>alwaysCreateEntryPointModule</code>,
+                            <code>useTsLinkResolution</code>.
+                        </li>
+                        <li>
+                            Уточнить политику фильтрации:
+                            <code>exclude*</code> и список <code>exclude</code>.
+                        </li>
+                        <li>
+                            Зафиксировать структуру навигации:
+                            <code>categorizeByGroup</code>,
+                            <code>categoryOrder</code>,
+                            <code>sort: [&quot;documents-first&quot;, ...]</code
+                            >.
+                        </li>
+                        <li>
+                            Подключить мануалы: <code>projectDocuments</code>,
+                            фронтматтер,
+                            <code>searchInDocuments</code
+                            >/<code>searchInComments</code>.
+                        </li>
+                        <li>
+                            Настроить подсветку:
+                            <code>highlightLanguages</code>,
+                            <code>lightHighlightTheme</code>,
+                            <code>darkHighlightTheme</code>.
+                        </li>
+                        <li>
+                            Включить валидацию: <code>validation</code>, при
+                            необходимости ужесточить
+                            <code>treatWarningsAsErrors</code>.
+                        </li>
+                        <li>Собрать и проверить готовый сайт документации.</li>
+                    </ol>
+                    <hr />
+                    <h2
+                        id="пример-итогового-блока-изменений-в"
+                        class="tsd-anchor-link">
+                        Пример итогового блока изменений в
+                        <code>typedoc.json</code
+                        ><a
+                            href="#пример-итогового-блока-изменений-в"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;@your-scope/your-library&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;out&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;docs&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;readme&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;README.md&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;includeVersion&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;cleanOutputDir&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;hideGenerator&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;titleLink&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;https://github.com/&lt;org&gt;/&lt;repo&gt;&quot;</span><span class="hl-0">,</span><br/><br/><span class="hl-0">    </span><span class="hl-4">&quot;entryPoints&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;src/index.ts&quot;</span><span class="hl-0">],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;entryPointStrategy&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;resolve&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;tsconfig&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;tsconfig.build.json&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;alwaysCreateEntryPointModule&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;useTsLinkResolution&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><br/><span class="hl-0">    </span><span class="hl-4">&quot;gitRevision&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;HEAD&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;sourceLinkTemplate&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;https://github.com/&lt;org&gt;/&lt;repo&gt;/blob/{gitRevision}/{path}#L{line}&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;sourceLinkExternal&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;displayBasePath&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;src&quot;</span><span class="hl-0">,</span><br/><br/><span class="hl-0">    </span><span class="hl-4">&quot;excludeExternals&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;excludePrivate&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;excludeProtected&quot;</span><span class="hl-0">: </span><span class="hl-4">false</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;excludeInternal&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;excludeNotDocumented&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;exclude&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/*.spec.ts&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/*.test.ts&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/__tests__/**&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/__mocks__/**&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/fixtures/**&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/examples/**&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/scripts/**&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><br/><span class="hl-0">    </span><span class="hl-4">&quot;categorizeByGroup&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;defaultCategory&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;Misc&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;categoryOrder&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;Core&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;Builders&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;Utils&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;Types&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;Experimental&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;Misc&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;sort&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;documents-first&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;kind&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;alphabetical&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;source-order&quot;</span><span class="hl-0">],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;navigationLinks&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;GitHub&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;https://github.com/&lt;org&gt;/&lt;repo&gt;&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;Guides&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;manuals/typedoc.html&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    },</span><br/><br/><span class="hl-0">    </span><span class="hl-4">&quot;theme&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;typedoc-github-theme&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;plugin&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;typedoc-github-theme&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;typedoc-plugin-mdn-links&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;typedoc-plugin-rename-defaults&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;visibilityFilters&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;protected&quot;</span><span class="hl-0">: </span><span class="hl-4">false</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;private&quot;</span><span class="hl-0">: </span><span class="hl-4">false</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;inherited&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;external&quot;</span><span class="hl-0">: </span><span class="hl-4">false</span><span class="hl-0">,</span><br/><span class="hl-0">    },</span><br/><br/><span class="hl-0">    </span><span class="hl-4">&quot;projectDocuments&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;manuals/*.md&quot;</span><span class="hl-0">],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;searchInDocuments&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;searchInComments&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><br/><span class="hl-0">    </span><span class="hl-4">&quot;highlightLanguages&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;md&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;markdown&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;ts&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;js&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;json&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;jsonc&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;bash&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;sh&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;yaml&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;yml&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;text&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;lightHighlightTheme&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;github-light&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;darkHighlightTheme&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;github-dark&quot;</span><span class="hl-0">,</span><br/><br/><span class="hl-0">    </span><span class="hl-4">&quot;validation&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;notExported&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;invalidLink&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;notDocumented&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    },</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;treatWarningsAsErrors&quot;</span><span class="hl-0">: </span><span class="hl-4">false</span><span class="hl-0">,</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+                </div>
+            </div>
+            <div class="col-sidebar">
+                <div class="page-menu">
+                    <div class="tsd-navigation settings">
+                        <details class="tsd-accordion">
+                            <summary class="tsd-accordion-summary">
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    aria-hidden="true">
+                                    <use
+                                        href="../assets/icons.svg#icon-chevronDown"></use>
+                                </svg>
+                                <h3>Settings</h3>
+                            </summary>
+                            <div class="tsd-accordion-details">
+                                <div class="tsd-filter-visibility">
+                                    <span class="settings-label"
+                                        >Member Visibility</span
+                                    >
+                                    <ul id="tsd-filter-options">
+                                        <li class="tsd-filter-item">
+                                            <label class="tsd-filter-input"
+                                                ><input
+                                                    type="checkbox"
+                                                    id="tsd-filter-protected"
+                                                    name="protected" /><svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                    aria-hidden="true">
+                                                    <rect
+                                                        class="tsd-checkbox-background"
+                                                        width="30"
+                                                        height="30"
+                                                        x="1"
+                                                        y="1"
+                                                        rx="6"
+                                                        fill="none"></rect>
+                                                    <path
+                                                        class="tsd-checkbox-checkmark"
+                                                        d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25"
+                                                        stroke="none"
+                                                        stroke-width="3.5"
+                                                        stroke-linejoin="round"
+                                                        fill="none"></path></svg
+                                                ><span>Protected</span></label
+                                            >
+                                        </li>
+                                        <li class="tsd-filter-item">
+                                            <label class="tsd-filter-input"
+                                                ><input
+                                                    type="checkbox"
+                                                    id="tsd-filter-inherited"
+                                                    name="inherited"
+                                                    checked /><svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                    aria-hidden="true">
+                                                    <rect
+                                                        class="tsd-checkbox-background"
+                                                        width="30"
+                                                        height="30"
+                                                        x="1"
+                                                        y="1"
+                                                        rx="6"
+                                                        fill="none"></rect>
+                                                    <path
+                                                        class="tsd-checkbox-checkmark"
+                                                        d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25"
+                                                        stroke="none"
+                                                        stroke-width="3.5"
+                                                        stroke-linejoin="round"
+                                                        fill="none"></path></svg
+                                                ><span>Inherited</span></label
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tsd-theme-toggle">
+                                    <label
+                                        class="settings-label"
+                                        for="tsd-theme"
+                                        >Theme</label
+                                    ><select id="tsd-theme">
+                                        <option value="os">OS</option>
+                                        <option value="light">Light</option>
+                                        <option value="dark">Dark</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                    <details open class="tsd-accordion tsd-page-navigation">
+                        <summary class="tsd-accordion-summary">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-chevronDown"></use>
+                            </svg>
+                            <h3>On This Page</h3>
+                        </summary>
+                        <div class="tsd-accordion-details">
+                            <a href="#руководство-по-настройке-typedoc"
+                                ><span
+                                    >Руководство по настройке
+                                    <wbr />Type<wbr />Doc</span
+                                ></a
+                            >
+                            <ul>
+                                <li>
+                                    <a href="#предварительные-условия"
+                                        ><span>Предварительные условия</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#метаданные-проекта-и-выходные-артефакты"
+                                        ><span
+                                            >Метаданные проекта и выходные
+                                            артефакты</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#входные-точки-и-интеграция-с-typescript"
+                                        ><span
+                                            >Входные точки и интеграция с
+                                            <wbr />Type<wbr />Script</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#ссылки-на-исходники"
+                                        ><span>Ссылки на исходники</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#отбор-содержимого-и-фильтрация"
+                                        ><span
+                                            >Отбор содержимого и
+                                            фильтрация</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#организация-навигации-и-порядок-отображения"
+                                        ><span
+                                            >Организация навигации и порядок
+                                            отображения</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#тема-плагины-и-видимость-в-интерфейсе"
+                                        ><span
+                                            >Тема, плагины и видимость в
+                                            интерфейсе</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#внешние-руководства-и-поиск"
+                                        ><span
+                                            >Внешние руководства и поиск</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#подсветка-синтаксиса"
+                                        ><span>Подсветка синтаксиса</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#валидация-и-поведение-сборки"
+                                        ><span
+                                            >Валидация и поведение сборки</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#сборка-и-локальная-проверка"
+                                        ><span
+                                            >Сборка и локальная проверка</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#контрольный-список-изменений-короткая-версия"
+                                        ><span
+                                            >Контрольный список изменений
+                                            (короткая версия)</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#пример-итогового-блока-изменений-в"
+                                        ><span
+                                            >Пример итогового блока изменений в
+                                        </span></a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+                <div class="site-menu">
+                    <nav id="tsd-sidebar-links" class="tsd-navigation">
+                        <a
+                            href="https://github.com/rotcetihra/ts-template-project"
+                            class="tsd-nav-link"
+                            >GitHub</a
+                        >
+                    </nav>
+                    <nav class="tsd-navigation">
+                        <a href="../modules.html"
+                            >@rotcetihra/ts-template-project - v0.5.0</a
+                        >
+                        <ul
+                            class="tsd-small-nested-navigation"
+                            id="tsd-nav-container">
+                            <li>Loading...</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <footer></footer>
+        <div class="overlay"></div>
+    </body>
+</html>

@@ -1,0 +1,947 @@
+<!doctype html>
+<html class="default" lang="en" data-base="../">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="IE=edge" />
+        <title>
+            Подробная настройка Jest | @rotcetihra/ts-template-project - v0.5.0
+        </title>
+        <meta
+            name="description"
+            content="Documentation for @rotcetihra/ts-template-project" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="../assets/style.css" />
+        <link rel="stylesheet" href="../assets/highlight.css" />
+        <script defer src="../assets/main.js"></script>
+        <script async src="../assets/icons.js" id="tsd-icons-script"></script>
+        <script async src="../assets/search.js" id="tsd-search-script"></script>
+        <script
+            async
+            src="../assets/navigation.js"
+            id="tsd-nav-script"></script>
+        <script
+            async
+            src="../assets/hierarchy.js"
+            id="tsd-hierarchy-script"></script>
+        <link rel="stylesheet" href="../assets/typedoc-github-style.css" />
+    </head>
+    <body>
+        <script>
+            document.documentElement.dataset.theme =
+                localStorage.getItem('tsd-theme') || 'os';
+            document.body.style.display = 'none';
+            setTimeout(
+                () =>
+                    window.app ?
+                        app.showPage()
+                    :   document.body.style.removeProperty('display'),
+                500,
+            );
+        </script>
+        <header class="tsd-page-toolbar">
+            <div class="tsd-toolbar-contents container">
+                <a
+                    href="https://github.com/rotcetihra/ts-template-project"
+                    class="title"
+                    >@rotcetihra/ts-template-project - v0.5.0</a
+                >
+                <div id="tsd-toolbar-links">
+                    <a href="https://github.com/rotcetihra/ts-template-project"
+                        >GitHub</a
+                    >
+                </div>
+                <button
+                    id="tsd-search-trigger"
+                    class="tsd-widget"
+                    aria-label="Search">
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true">
+                        <use href="../assets/icons.svg#icon-search"></use>
+                    </svg>
+                </button>
+                <dialog id="tsd-search" aria-label="Search">
+                    <input
+                        role="combobox"
+                        id="tsd-search-input"
+                        aria-controls="tsd-search-results"
+                        aria-autocomplete="list"
+                        aria-expanded="true"
+                        autocapitalize="off"
+                        autocomplete="off"
+                        placeholder="Search the docs"
+                        maxlength="100" />
+                    <ul role="listbox" id="tsd-search-results"></ul>
+                    <div
+                        id="tsd-search-status"
+                        aria-live="polite"
+                        aria-atomic="true">
+                        <div>Preparing search index...</div>
+                    </div>
+                </dialog>
+                <a
+                    href="#"
+                    class="tsd-widget menu"
+                    id="tsd-toolbar-menu-trigger"
+                    data-toggle="menu"
+                    aria-label="Menu"
+                    ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true">
+                        <use href="../assets/icons.svg#icon-menu"></use></svg
+                ></a>
+            </div>
+        </header>
+        <div class="container container-main">
+            <div class="col-content">
+                <div class="tsd-page-title">
+                    <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+                        <li>
+                            <a href="" aria-current="page"
+                                >Подробная настройка Jest</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class="tsd-panel tsd-typography">
+                    <h1
+                        id="руководство-по-настройке-jest"
+                        class="tsd-anchor-link">
+                        Руководство по настройке <strong>Jest</strong
+                        ><a
+                            href="#руководство-по-настройке-jest"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h1>
+                    <p>
+                        <strong>Назначение:</strong> пошаговая инструкция для
+                        пользователя, который берет шаблон
+                        <code>ts-template-project</code> и настраивает модульные
+                        тесты под свой проект. Все зависимости уже установлены;
+                        требуется скорректировать конфигурацию, пути, пресеты и
+                        покрытие.
+                    </p>
+                    <hr />
+                    <h2 id="1-что-вы-получите" class="tsd-anchor-link">
+                        1. Что вы получите<a
+                            href="#1-что-вы-получите"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            Запуск тестов в среде Node.js с поддержкой
+                            <strong>ESM</strong> и <strong>TypeScript</strong>.
+                        </li>
+                        <li>
+                            Корректное разрешение алиасов <code>@/…</code> и
+                            спецификаторов с суффиксом <code>.js</code> при
+                            режиме <strong>NodeNext</strong>.
+                        </li>
+                        <li>
+                            Быстрые повторные прогоны, контролируемое покрытие,
+                            предсказуемые отчеты.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="2-какие-файлы-изменять" class="tsd-anchor-link">
+                        2. Какие файлы изменять<a
+                            href="#2-какие-файлы-изменять"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>В типовом случае достаточно отредактировать:</p>
+                    <pre><code><span class="hl-0">jest.config.js          # основные настройки </span><span class="hl-1">Jest</span><span class="hl-0"> (</span><span class="hl-4">ESM</span><span class="hl-0">)</span><br/><span class="hl-0">tsconfig.json           # типы </span><span class="hl-5">&#39;jest&#39;</span><span class="hl-0"> для </span><span class="hl-4">IDE</span><span class="hl-2">/</span><span class="hl-1">разработки</span><span class="hl-0"> (если нужно)</span><br/><span class="hl-0">tsconfig.base.json      # aliases</span><span class="hl-2">/</span><span class="hl-1">paths</span><span class="hl-0"> (должны соответствовать moduleNameMapper)</span><br/><span class="hl-0">package.json            # скрипты </span><span class="hl-5">&#39;test&#39;</span><span class="hl-2">/</span><span class="hl-5">&#39;test:watch&#39;</span>
+</code><button>Copy</button></pre>
+
+                    <blockquote>
+                        <p>
+                            В шаблоне уже включены все необходимые пакеты:
+                            <code>jest</code>, <code>ts-jest</code>,
+                            <code>ts-jest-resolver</code> и т. д.
+                        </p>
+                    </blockquote>
+                    <hr />
+                    <h2
+                        id="3-минимальный-набор-действий"
+                        class="tsd-anchor-link">
+                        3. Минимальный набор действий<a
+                            href="#3-минимальный-набор-действий"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ol>
+                        <li>
+                            Оставьте или скорректируйте <code>roots</code> и
+                            <code>testMatch</code> под свою структуру.
+                        </li>
+                        <li>
+                            При необходимости измените
+                            <code>moduleNameMapper</code>, чтобы отразить ваши
+                            алиасы.
+                        </li>
+                        <li>
+                            Выберите <code>testEnvironment</code> (<code
+                                >node</code
+                            >
+                            или <code>jsdom</code>).
+                        </li>
+                        <li>Запустите:</li>
+                    </ol>
+                    <pre><code class="bash"><span class="hl-1">npm</span><span class="hl-0"> </span><span class="hl-5">test</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>или:</p>
+                    <pre><code class="bash"><span class="hl-1">npm</span><span class="hl-0"> </span><span class="hl-5">run</span><span class="hl-0"> </span><span class="hl-5">test:watch</span>
+</code><button type="button">Copy</button></pre>
+
+                    <hr />
+                    <h2
+                        id="4-рекомендуемая-конфигурация-esm--typescript"
+                        class="tsd-anchor-link">
+                        4. Рекомендуемая конфигурация
+                        <code>jest.config.js</code> (ESM + TypeScript)<a
+                            href="#4-рекомендуемая-конфигурация-esm--typescript"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Ниже базовый конфиг, ориентированный на ESM/NodeNext и
+                        алиасы из шаблона:
+                    </p>
+                    <pre><code class="js"><span class="hl-3">// jest.config.js</span><br/><br/><span class="hl-3">/**</span><br/><span class="hl-3"> * JEST CONFIG (ESM + TypeScript)</span><br/><span class="hl-3"> * Назначение:</span><br/><span class="hl-3"> *   • Запуск модульных тестов в Node.js с поддержкой ESM и TypeScript.</span><br/><span class="hl-3"> *   • Корректный резолв алиасов &quot;@/...&quot; и спецификаторов с суффиксом &quot;.js&quot;.</span><br/><span class="hl-3"> *   • Повторяемые прогоны: сброс моков, явные паттерны поиска.</span><br/><span class="hl-3"> */</span><br/><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-4">config</span><span class="hl-0"> </span><span class="hl-2">=</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-3">// 1) БАЗОВОЕ ПОВЕДЕНИЕ</span><br/><span class="hl-0">    bail: </span><span class="hl-4">1</span><span class="hl-0">,</span><br/><span class="hl-0">    clearMocks: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    verbose: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    rootDir: </span><span class="hl-5">&#39;.&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    testEnvironment: </span><span class="hl-5">&#39;node&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    testTimeout: </span><span class="hl-4">10_000</span><span class="hl-0">,</span><br/><span class="hl-0">    watchPathIgnorePatterns: [</span><span class="hl-5">&#39;&lt;rootDir&gt;/dist&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;&lt;rootDir&gt;/.tsbuildinfo&#39;</span><span class="hl-0">],</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// 2) ОБЛАСТЬ ПОИСКА ТЕСТОВ</span><br/><span class="hl-0">    roots: [</span><span class="hl-5">&#39;&lt;rootDir&gt;/tests&#39;</span><span class="hl-0">],</span><br/><span class="hl-0">    testMatch: [</span><span class="hl-5">&#39;&lt;rootDir&gt;/tests/**/*.test.ts&#39;</span><span class="hl-0">],</span><br/><span class="hl-0">    testPathIgnorePatterns: [</span><span class="hl-5">&#39;/node_modules/&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;/dist/&#39;</span><span class="hl-0">],</span><br/><span class="hl-0">    moduleFileExtensions: [</span><span class="hl-5">&#39;ts&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;tsx&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;js&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;json&#39;</span><span class="hl-0">],</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// 3) TYPESCRIPT + ESM</span><br/><span class="hl-0">    preset: </span><span class="hl-5">&#39;ts-jest/presets/default-esm&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    transform: {</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;^.+</span><span class="hl-4">\\</span><span class="hl-5">.tsx?$&#39;</span><span class="hl-0">: [</span><br/><span class="hl-0">            </span><span class="hl-5">&#39;ts-jest&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">            {</span><br/><span class="hl-0">                useESM: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">                tsconfig: </span><span class="hl-5">&#39;&lt;rootDir&gt;/tsconfig.json&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">            },</span><br/><span class="hl-0">        ],</span><br/><span class="hl-0">    },</span><br/><span class="hl-0">    extensionsToTreatAsEsm: [</span><span class="hl-5">&#39;.ts&#39;</span><span class="hl-0">],</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// 4) РЕЗОЛВ МОДУЛЕЙ И АЛИАСЫ</span><br/><span class="hl-0">    resolver: </span><span class="hl-5">&#39;ts-jest-resolver&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    moduleNameMapper: {</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;^@/(.*)</span><span class="hl-4">\\</span><span class="hl-5">.js$&#39;</span><span class="hl-0">: </span><span class="hl-5">&#39;&lt;rootDir&gt;/src/$1.ts&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;^@/(.*)$&#39;</span><span class="hl-0">: </span><span class="hl-5">&#39;&lt;rootDir&gt;/src/$1&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;^tests/(.*)</span><span class="hl-4">\\</span><span class="hl-5">.js$&#39;</span><span class="hl-0">: </span><span class="hl-5">&#39;&lt;rootDir&gt;/tests/$1.ts&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;^tests/(.*)$&#39;</span><span class="hl-0">: </span><span class="hl-5">&#39;&lt;rootDir&gt;/tests/$1&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;^(</span><span class="hl-4">\\</span><span class="hl-5">.{1,2}/.*)</span><span class="hl-4">\\</span><span class="hl-5">.js$&#39;</span><span class="hl-0">: </span><span class="hl-5">&#39;$1&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    },</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// 5) ПОКРЫТИЕ</span><br/><span class="hl-0">    collectCoverage: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    collectCoverageFrom: [</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;&lt;rootDir&gt;/src/**/*.{ts,tsx}&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;!&lt;rootDir&gt;/src/**/*.d.ts&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><span class="hl-0">    coveragePathIgnorePatterns: [</span><span class="hl-5">&#39;/node_modules/&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;/dist/&#39;</span><span class="hl-0">],</span><br/><span class="hl-0">    coverageProvider: </span><span class="hl-5">&#39;v8&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">};</span><br/><br/><span class="hl-2">export</span><span class="hl-0"> </span><span class="hl-2">default</span><span class="hl-0"> config;</span>
+</code><button type="button">Copy</button></pre>
+
+                    <blockquote>
+                        <p>
+                            Этот конфиг согласован с
+                            <code>tsconfig.base.json</code>:
+                            <code>module: &quot;NodeNext&quot;</code>,
+                            <code>paths</code> с алиасом <code>@/*</code>.
+                        </p>
+                    </blockquote>
+                    <hr />
+                    <h2
+                        id="5-ключевые-опции-для-адаптации"
+                        class="tsd-anchor-link">
+                        5. Ключевые опции для адаптации<a
+                            href="#5-ключевые-опции-для-адаптации"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            <p>
+                                <strong><code>roots</code></strong
+                                >: базовые каталоги, где лежат тесты. Пример:
+                                <code
+                                    >['&lt;rootDir&gt;/tests',
+                                    '&lt;rootDir&gt;/packages/*/tests']</code
+                                >.
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <strong><code>testMatch</code></strong
+                                >: шаблоны файлов тестов. Пример:
+                                <code
+                                    >['**/__tests__/**/*.ts',
+                                    '**/?(*.)+(spec|test).ts']</code
+                                >.
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <strong><code>testEnvironment</code></strong
+                                >: <code>node</code> или <code>jsdom</code>. Для
+                                тестов, требующих DOM, укажите
+                                <code>jsdom</code>.
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <strong><code>moduleNameMapper</code></strong
+                                >: сопоставление алиасов и «.js-спецификаторов».
+                                Обновите пути под вашу структуру (особенно если
+                                меняется корень <code>src/</code>).
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <strong><code>collectCoverageFrom</code></strong
+                                >: определяет, с каких файлов собирать покрытие.
+                                Добавьте/исключите каталоги по своему проекту.
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <strong
+                                    ><code>bail</code>,
+                                    <code>testTimeout</code></strong
+                                >: поведение при ошибках и таймауты. Для
+                                долговременных интеграционных тестов увеличьте
+                                таймаут.
+                            </p>
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="6-интеграция-с-typescript" class="tsd-anchor-link">
+                        6. Интеграция с TypeScript<a
+                            href="#6-интеграция-с-typescript"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            <p>В <code>tsconfig.base.json</code>:</p>
+                            <ul>
+                                <li>
+                                    <code>module: &quot;NodeNext&quot;</code>,
+                                    <code
+                                        >moduleResolution:
+                                        &quot;NodeNext&quot;</code
+                                    >,
+                                    <code
+                                        >moduleDetection:
+                                        &quot;force&quot;</code
+                                    >;
+                                </li>
+                                <li>
+                                    алиасы <code>@/*</code> должны
+                                    соответствовать реальным путям.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>В <code>tsconfig.json</code> (IDE):</p>
+                            <ul>
+                                <li>
+                                    <p>
+                                        <code>types</code> должен включать
+                                        <code>jest</code>, если IDE не
+                                        подхватывает типы автоматически:
+                                    </p>
+                                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;extends&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;./tsconfig.base.json&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;compilerOptions&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;noEmit&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;sourceMap&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;allowImportingTsExtensions&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;types&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;node&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;jest&quot;</span><span class="hl-0">],</span><br/><span class="hl-0">    },</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;include&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;src&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;tests&quot;</span><span class="hl-0">],</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p><code>ts-jest</code>:</p>
+                            <ul>
+                                <li>
+                                    пресет
+                                    <code>ts-jest/presets/default-esm</code> и
+                                    <code>useESM: true</code> необходимы, чтобы
+                                    компилировать тесты и исходники в ESM на
+                                    лету;
+                                </li>
+                                <li>
+                                    <code>ts-jest-resolver</code> учитывает
+                                    <code>compilerOptions.paths</code> и
+                                    избавляет от ручной синхронизации алиасов.
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="7-esm-и-nodenext-практические-вопросы"
+                        class="tsd-anchor-link">
+                        7. ESM и NodeNext: практические вопросы<a
+                            href="#7-esm-и-nodenext-практические-вопросы"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            <p>
+                                <strong
+                                    >Спецификаторы с <code>.js</code> в
+                                    исходниках</strong
+                                >: при <code>NodeNext</code> импорт может
+                                выглядеть как
+                                <code>import { x } from '@/utils/foo.js'</code>,
+                                хотя исходник написан в <code>foo.ts</code>.
+                                <code>moduleNameMapper</code> в конфиге Jest
+                                маппит такие импорты на <code>.ts</code>.
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <strong>Запуск Jest как ESM</strong>: в шаблоне
+                                используются скрипты вида
+                                <code
+                                    >node --experimental-vm-modules
+                                    ./node_modules/jest/bin/jest.js</code
+                                >. Они уже добавлены в
+                                <code>package.json</code>. Используйте
+                                <code>npm test</code> и
+                                <code>npm run test:watch</code>.
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <strong
+                                    >JSON с
+                                    <code>assert { type: 'json' }</code></strong
+                                >: поддерживается <code>ts-jest</code>.
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <strong
+                                    ><code>import.meta.url</code> и TLA</strong
+                                >: доступны в ESM при Node 18+.
+                            </p>
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="8-моки-и-подготовительные-файлы"
+                        class="tsd-anchor-link">
+                        8. Моки и подготовительные файлы<a
+                            href="#8-моки-и-подготовительные-файлы"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Если требуется общая инициализация перед каждым тестовым
+                        прогоном (таймеры, расширения <code>expect</code>,
+                        полифилы), добавьте <code>setupFiles</code> или
+                        <code>setupFilesAfterEnv</code>.
+                    </p>
+                    <p><strong>Пример:</strong></p>
+                    <pre><code class="ts"><span class="hl-3">// tests/jest.setup.ts</span><br/><span class="hl-2">import</span><span class="hl-0"> </span><span class="hl-5">&#39;@testing-library/jest-dom/extend-expect&#39;</span><span class="hl-0">; </span><span class="hl-3">// пример для jsdom-проектов</span><br/><span class="hl-0">jest.</span><span class="hl-1">useFakeTimers</span><span class="hl-0">();</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>И подключите в конфиге:</p>
+                    <pre><code class="js"><span class="hl-3">// jest.config.js</span><br/><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-4">config</span><span class="hl-0"> </span><span class="hl-2">=</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-3">// ...</span><br/><span class="hl-0">    setupFilesAfterEnv: [</span><span class="hl-5">&#39;&lt;rootDir&gt;/tests/jest.setup.ts&#39;</span><span class="hl-0">],</span><br/><span class="hl-0">};</span>
+</code><button type="button">Copy</button></pre>
+
+                    <hr />
+                    <h2 id="9-покрытие-кода" class="tsd-anchor-link">
+                        9. Покрытие кода<a
+                            href="#9-покрытие-кода"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            <strong><code>collectCoverageFrom</code></strong>
+                            определяет набор файлов, где считается покрытие.
+                        </li>
+                        <li>
+                            <strong><code>coverageProvider: 'v8'</code></strong>
+                            — быстрый и точный провайдер.
+                        </li>
+                        <li>
+                            Пороговые значения можно зафиксировать в
+                            <code>coverageThreshold</code>, например:
+                        </li>
+                    </ul>
+                    <pre><code class="js"><span class="hl-1">coverageThreshold</span><span class="hl-0">: {</span><br/><span class="hl-0">  </span><span class="hl-1">global</span><span class="hl-0">: {</span><br/><span class="hl-0">    </span><span class="hl-1">branches</span><span class="hl-0">: </span><span class="hl-4">80</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">functions</span><span class="hl-0">: </span><span class="hl-4">85</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">lines</span><span class="hl-0">: </span><span class="hl-4">90</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-1">statements</span><span class="hl-0">: </span><span class="hl-4">90</span><br/><span class="hl-0">  }</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <hr />
+                    <h2 id="10-скрипты-в" class="tsd-anchor-link">
+                        10. Скрипты в <code>package.json</code
+                        ><a
+                            href="#10-скрипты-в"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>В шаблоне уже есть:</p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;scripts&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;test&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;node --experimental-vm-modules ./node_modules/jest/bin/jest.js&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;test:watch&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;node --experimental-vm-modules ./node_modules/jest/bin/jest.js --watch&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    },</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>При необходимости добавьте:</p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;scripts&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;test:cov&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;npm test -- --coverage&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;test:ci&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;npm test -- --runInBand --ci&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    },</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <hr />
+                    <h2
+                        id="11-диагностика-и-типичные-проблемы"
+                        class="tsd-anchor-link">
+                        11. Диагностика и типичные проблемы<a
+                            href="#11-диагностика-и-типичные-проблемы"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        <strong>Симптом:</strong>
+                        <code
+                            >SyntaxError: Cannot use import statement outside a
+                            module</code
+                        >
+                        <strong>Решение:</strong> убедитесь, что:
+                    </p>
+                    <ul>
+                        <li>
+                            используется пресет
+                            <code>ts-jest/presets/default-esm</code>;
+                        </li>
+                        <li>
+                            <code>useESM: true</code> в <code>transform</code>;
+                        </li>
+                        <li><code>extensionsToTreatAsEsm: ['.ts']</code>;</li>
+                        <li>
+                            запуск через <code>--experimental-vm-modules</code>.
+                        </li>
+                    </ul>
+                    <hr />
+                    <p>
+                        <strong>Симптом:</strong>
+                        <code>Cannot find module '@/...'</code>
+                        <strong>Решение:</strong> проверьте согласованность:
+                    </p>
+                    <ul>
+                        <li>
+                            <code>paths</code> в
+                            <code>tsconfig.base.json</code>;
+                        </li>
+                        <li>
+                            <code>moduleNameMapper</code> в
+                            <code>jest.config.js</code>;
+                        </li>
+                        <li>установлен ли <code>ts-jest-resolver</code>.</li>
+                    </ul>
+                    <hr />
+                    <p>
+                        <strong>Симптом:</strong> «Unknown file extension .ts»
+                        <strong>Решение:</strong> неправильный режим модулей.
+                        Проверьте:
+                    </p>
+                    <ul>
+                        <li>
+                            ESM-запуск Jest (скрипт в
+                            <code>package.json</code>);
+                        </li>
+                        <li>
+                            <code>preset</code> и <code>useESM</code> в
+                            <code>transform</code>;
+                        </li>
+                        <li><code>extensionsToTreatAsEsm</code>.</li>
+                    </ul>
+                    <hr />
+                    <p>
+                        <strong>Симптом:</strong> тесты «висят» или нестабильны
+                        <strong>Решение:</strong> увеличьте
+                        <code>testTimeout</code>, отключите параллельность для
+                        проблемных тестов, корректно очищайте таймеры/моки в
+                        <code>afterEach</code>.
+                    </p>
+                    <hr />
+                    <p>
+                        <strong>Симптом:</strong> неожиданные пути в отчете
+                        покрытия <strong>Решение:</strong> скорректируйте
+                        <code>collectCoverageFrom</code> и
+                        <code>coveragePathIgnorePatterns</code>.
+                    </p>
+                    <hr />
+                    <h2
+                        id="12-советы-для-монорепозитория"
+                        class="tsd-anchor-link">
+                        12. Советы для монорепозитория<a
+                            href="#12-советы-для-монорепозитория"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            Размещайте локальные <code>jest.config.js</code> в
+                            пакетах, если нужны разные окружения/паттерны.
+                        </li>
+                        <li>
+                            В корне используйте скрипты-агрегаторы (например,
+                            через <code>lerna</code>/<code
+                                >pnpm -r run test</code
+                            >).
+                        </li>
+                        <li>
+                            Следите за тем, чтобы
+                            <code>moduleNameMapper</code> и
+                            <code>paths</code> каждого пакета были согласованы.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="13-контрольный-список" class="tsd-anchor-link">
+                        13. Контрольный список<a
+                            href="#13-контрольный-список"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            [ ] Проверены <code>roots</code>,
+                            <code>testMatch</code>,
+                            <code>testEnvironment</code>.
+                        </li>
+                        <li>
+                            [ ] Согласованы алиасы:
+                            <code>tsconfig.base.json</code> ↔
+                            <code>moduleNameMapper</code>.
+                        </li>
+                        <li>
+                            [ ] Включен ESM-пайплайн: <code>preset</code>,
+                            <code>useESM</code>,
+                            <code>extensionsToTreatAsEsm</code>.
+                        </li>
+                        <li>
+                            [ ] Настроено покрытие:
+                            <code>collectCoverageFrom</code>,
+                            <code>coverageProvider</code>.
+                        </li>
+                        <li>
+                            [ ] (Опционально) Подключены
+                            <code>setupFilesAfterEnv</code>.
+                        </li>
+                        <li>
+                            [ ] Скрипты <code>test</code>/<code
+                                >test:watch</code
+                            >
+                            работают локально и в CI.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="14-примеры-файлов" class="tsd-anchor-link">
+                        14. Примеры файлов<a
+                            href="#14-примеры-файлов"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        <strong><code>jest.config.js</code></strong> — см.
+                        раздел 4.
+                    </p>
+                    <p>
+                        <strong><code>tests/example.test.ts</code></strong>
+                    </p>
+                    <pre><code class="ts"><span class="hl-2">import</span><span class="hl-0"> { sum } </span><span class="hl-2">from</span><span class="hl-0"> </span><span class="hl-5">&#39;@/math/sum.js&#39;</span><span class="hl-0">; </span><span class="hl-3">// NodeNext-стиль: .js в спецификаторе</span><br/><br/><span class="hl-1">describe</span><span class="hl-0">(</span><span class="hl-5">&#39;sum&#39;</span><span class="hl-0">, () </span><span class="hl-2">=&gt;</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-1">it</span><span class="hl-0">(</span><span class="hl-5">&#39;adds numbers&#39;</span><span class="hl-0">, () </span><span class="hl-2">=&gt;</span><span class="hl-0"> {</span><br/><span class="hl-0">        </span><span class="hl-1">expect</span><span class="hl-0">(</span><span class="hl-1">sum</span><span class="hl-0">(</span><span class="hl-4">2</span><span class="hl-0">, </span><span class="hl-4">3</span><span class="hl-0">)).</span><span class="hl-1">toBe</span><span class="hl-0">(</span><span class="hl-4">5</span><span class="hl-0">);</span><br/><span class="hl-0">    });</span><br/><span class="hl-0">});</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>
+                        <strong><code>src/math/sum.ts</code></strong>
+                    </p>
+                    <pre><code class="ts"><span class="hl-2">export</span><span class="hl-0"> </span><span class="hl-2">function</span><span class="hl-0"> </span><span class="hl-1">sum</span><span class="hl-0">(</span><span class="hl-6">a</span><span class="hl-2">:</span><span class="hl-0"> </span><span class="hl-4">number</span><span class="hl-0">, </span><span class="hl-6">b</span><span class="hl-2">:</span><span class="hl-0"> </span><span class="hl-4">number</span><span class="hl-0">)</span><span class="hl-2">:</span><span class="hl-0"> </span><span class="hl-4">number</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-2">return</span><span class="hl-0"> a </span><span class="hl-2">+</span><span class="hl-0"> b;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>
+                        <strong><code>tsconfig.json</code> (фрагмент)</strong> —
+                        см. раздел 6.
+                    </p>
+                    <hr />
+                    <p>
+                        Настройка завершена. Согласуйте пути и пресеты один раз,
+                        зафиксируйте базовые паттерны, и тестовый контур будет
+                        работать предсказуемо как локально, так и в CI.
+                    </p>
+                </div>
+            </div>
+            <div class="col-sidebar">
+                <div class="page-menu">
+                    <div class="tsd-navigation settings">
+                        <details class="tsd-accordion">
+                            <summary class="tsd-accordion-summary">
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    aria-hidden="true">
+                                    <use
+                                        href="../assets/icons.svg#icon-chevronDown"></use>
+                                </svg>
+                                <h3>Settings</h3>
+                            </summary>
+                            <div class="tsd-accordion-details">
+                                <div class="tsd-filter-visibility">
+                                    <span class="settings-label"
+                                        >Member Visibility</span
+                                    >
+                                    <ul id="tsd-filter-options">
+                                        <li class="tsd-filter-item">
+                                            <label class="tsd-filter-input"
+                                                ><input
+                                                    type="checkbox"
+                                                    id="tsd-filter-protected"
+                                                    name="protected" /><svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                    aria-hidden="true">
+                                                    <rect
+                                                        class="tsd-checkbox-background"
+                                                        width="30"
+                                                        height="30"
+                                                        x="1"
+                                                        y="1"
+                                                        rx="6"
+                                                        fill="none"></rect>
+                                                    <path
+                                                        class="tsd-checkbox-checkmark"
+                                                        d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25"
+                                                        stroke="none"
+                                                        stroke-width="3.5"
+                                                        stroke-linejoin="round"
+                                                        fill="none"></path></svg
+                                                ><span>Protected</span></label
+                                            >
+                                        </li>
+                                        <li class="tsd-filter-item">
+                                            <label class="tsd-filter-input"
+                                                ><input
+                                                    type="checkbox"
+                                                    id="tsd-filter-inherited"
+                                                    name="inherited"
+                                                    checked /><svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                    aria-hidden="true">
+                                                    <rect
+                                                        class="tsd-checkbox-background"
+                                                        width="30"
+                                                        height="30"
+                                                        x="1"
+                                                        y="1"
+                                                        rx="6"
+                                                        fill="none"></rect>
+                                                    <path
+                                                        class="tsd-checkbox-checkmark"
+                                                        d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25"
+                                                        stroke="none"
+                                                        stroke-width="3.5"
+                                                        stroke-linejoin="round"
+                                                        fill="none"></path></svg
+                                                ><span>Inherited</span></label
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tsd-theme-toggle">
+                                    <label
+                                        class="settings-label"
+                                        for="tsd-theme"
+                                        >Theme</label
+                                    ><select id="tsd-theme">
+                                        <option value="os">OS</option>
+                                        <option value="light">Light</option>
+                                        <option value="dark">Dark</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                    <details open class="tsd-accordion tsd-page-navigation">
+                        <summary class="tsd-accordion-summary">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-chevronDown"></use>
+                            </svg>
+                            <h3>On This Page</h3>
+                        </summary>
+                        <div class="tsd-accordion-details">
+                            <a href="#руководство-по-настройке-jest"
+                                ><span
+                                    >Руководство по настройке <wbr />Jest</span
+                                ></a
+                            >
+                            <ul>
+                                <li>
+                                    <a href="#1-что-вы-получите"
+                                        ><span>1. Что вы получите</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#2-какие-файлы-изменять"
+                                        ><span>2. Какие файлы изменять</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#3-минимальный-набор-действий"
+                                        ><span
+                                            >3. Минимальный набор действий</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#4-рекомендуемая-конфигурация-esm--typescript"
+                                        ><span
+                                            >4. Рекомендуемая конфигурация (<wbr />ESM
+                                            + <wbr />Type<wbr />Script)</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#5-ключевые-опции-для-адаптации"
+                                        ><span
+                                            >5. Ключевые опции для
+                                            адаптации</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#6-интеграция-с-typescript"
+                                        ><span
+                                            >6. Интеграция с
+                                            <wbr />Type<wbr />Script</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#7-esm-и-nodenext-практические-вопросы"
+                                        ><span
+                                            >7. <wbr />ESM и
+                                            <wbr />Node<wbr />Next: практические
+                                            вопросы</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#8-моки-и-подготовительные-файлы"
+                                        ><span
+                                            >8. Моки и подготовительные
+                                            файлы</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#9-покрытие-кода"
+                                        ><span>9. Покрытие кода</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#10-скрипты-в"
+                                        ><span>10. Скрипты в </span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#11-диагностика-и-типичные-проблемы"
+                                        ><span
+                                            >11. Диагностика и типичные
+                                            проблемы</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#12-советы-для-монорепозитория"
+                                        ><span
+                                            >12. Советы для
+                                            монорепозитория</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#13-контрольный-список"
+                                        ><span>13. Контрольный список</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#14-примеры-файлов"
+                                        ><span>14. Примеры файлов</span></a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+                <div class="site-menu">
+                    <nav id="tsd-sidebar-links" class="tsd-navigation">
+                        <a
+                            href="https://github.com/rotcetihra/ts-template-project"
+                            class="tsd-nav-link"
+                            >GitHub</a
+                        >
+                    </nav>
+                    <nav class="tsd-navigation">
+                        <a href="../modules.html"
+                            >@rotcetihra/ts-template-project - v0.5.0</a
+                        >
+                        <ul
+                            class="tsd-small-nested-navigation"
+                            id="tsd-nav-container">
+                            <li>Loading...</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <footer></footer>
+        <div class="overlay"></div>
+    </body>
+</html>

@@ -31,7 +31,7 @@ describe('MyClass | features (behavior-level)', () => {
         expect(inst.overloaded(123)).toBe('123');
     });
 
-    test('дженерик: firstItem<T>() возвращает первый элемент или undefined', () => {
+    test('firstItem<T>() возвращает первый элемент или undefined', () => {
         const inst = new MyClass();
         expect(inst.firstItem([1, 2, 3])).toBe(1);
         expect(inst.firstItem<string>([])).toBeUndefined();

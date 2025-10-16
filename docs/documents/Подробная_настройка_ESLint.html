@@ -1,0 +1,865 @@
+<!doctype html>
+<html class="default" lang="en" data-base="../">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="IE=edge" />
+        <title>
+            Подробная настройка ESLint | @rotcetihra/ts-template-project -
+            v0.5.0
+        </title>
+        <meta
+            name="description"
+            content="Documentation for @rotcetihra/ts-template-project" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="../assets/style.css" />
+        <link rel="stylesheet" href="../assets/highlight.css" />
+        <script defer src="../assets/main.js"></script>
+        <script async src="../assets/icons.js" id="tsd-icons-script"></script>
+        <script async src="../assets/search.js" id="tsd-search-script"></script>
+        <script
+            async
+            src="../assets/navigation.js"
+            id="tsd-nav-script"></script>
+        <script
+            async
+            src="../assets/hierarchy.js"
+            id="tsd-hierarchy-script"></script>
+        <link rel="stylesheet" href="../assets/typedoc-github-style.css" />
+    </head>
+    <body>
+        <script>
+            document.documentElement.dataset.theme =
+                localStorage.getItem('tsd-theme') || 'os';
+            document.body.style.display = 'none';
+            setTimeout(
+                () =>
+                    window.app ?
+                        app.showPage()
+                    :   document.body.style.removeProperty('display'),
+                500,
+            );
+        </script>
+        <header class="tsd-page-toolbar">
+            <div class="tsd-toolbar-contents container">
+                <a
+                    href="https://github.com/rotcetihra/ts-template-project"
+                    class="title"
+                    >@rotcetihra/ts-template-project - v0.5.0</a
+                >
+                <div id="tsd-toolbar-links">
+                    <a href="https://github.com/rotcetihra/ts-template-project"
+                        >GitHub</a
+                    >
+                </div>
+                <button
+                    id="tsd-search-trigger"
+                    class="tsd-widget"
+                    aria-label="Search">
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true">
+                        <use href="../assets/icons.svg#icon-search"></use>
+                    </svg>
+                </button>
+                <dialog id="tsd-search" aria-label="Search">
+                    <input
+                        role="combobox"
+                        id="tsd-search-input"
+                        aria-controls="tsd-search-results"
+                        aria-autocomplete="list"
+                        aria-expanded="true"
+                        autocapitalize="off"
+                        autocomplete="off"
+                        placeholder="Search the docs"
+                        maxlength="100" />
+                    <ul role="listbox" id="tsd-search-results"></ul>
+                    <div
+                        id="tsd-search-status"
+                        aria-live="polite"
+                        aria-atomic="true">
+                        <div>Preparing search index...</div>
+                    </div>
+                </dialog>
+                <a
+                    href="#"
+                    class="tsd-widget menu"
+                    id="tsd-toolbar-menu-trigger"
+                    data-toggle="menu"
+                    aria-label="Menu"
+                    ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true">
+                        <use href="../assets/icons.svg#icon-menu"></use></svg
+                ></a>
+            </div>
+        </header>
+        <div class="container container-main">
+            <div class="col-content">
+                <div class="tsd-page-title">
+                    <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+                        <li>
+                            <a href="" aria-current="page"
+                                >Подробная настройка ESLint</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class="tsd-panel tsd-typography">
+                    <h1
+                        id="руководство-по-настройке-eslint"
+                        class="tsd-anchor-link">
+                        Руководство по настройке <strong>ESLint</strong
+                        ><a
+                            href="#руководство-по-настройке-eslint"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h1>
+                    <p>
+                        <strong>Назначение:</strong> пошаговая инструкция для
+                        пользователя, который берёт шаблон
+                        <code>ts-template-project</code> и настраивает
+                        анализатор кода под свой проект. Все зависимости уже
+                        установлены; требуется скорректировать конфигурацию,
+                        пути, правила и интеграции.
+                    </p>
+                    <blockquote>
+                        <p>
+                            Шаблон использует
+                            <strong>ESLint 9 (Flat Config)</strong>,
+                            <strong>ESM-конфиг</strong> и стек
+                            <code>typescript-eslint</code>. Конфигурация
+                            согласована с Prettier.
+                        </p>
+                    </blockquote>
+                    <hr />
+                    <h2 id="1-что-вы-получите" class="tsd-anchor-link">
+                        1. Что вы получите<a
+                            href="#1-что-вы-получите"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            Единые правила качества кода для
+                            <strong>TypeScript</strong> и
+                            <strong>JavaScript</strong>.
+                        </li>
+                        <li>
+                            Типо-осведомлённый анализ
+                            (<code>recommendedTypeChecked</code>,
+                            <code>stylisticTypeChecked</code>) там, где это
+                            нужно.
+                        </li>
+                        <li>
+                            Корректный резолв алиасов из
+                            <code>tsconfig</code> (через
+                            <code>ts-jest-resolver</code> в тестах и явные
+                            маппинги при необходимости).
+                        </li>
+                        <li>
+                            Совместимость с Prettier: форматирование и линтинг
+                            не конфликтуют.
+                        </li>
+                        <li>
+                            Готовые интеграции для
+                            <strong>Jest</strong> (глобалы для тестов),
+                            <strong>lint-staged</strong> и <strong>CI</strong>.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="2-какие-файлы-изменять" class="tsd-anchor-link">
+                        2. Какие файлы изменять<a
+                            href="#2-какие-файлы-изменять"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>Основные точки конфигурации:</p>
+                    <pre><code><span class="hl-0">eslint.config.js        # основной </span><span class="hl-4">ESM</span><span class="hl-2">-</span><span class="hl-1">конфиг</span><span class="hl-0"> (Flat Config)</span><br/><span class="hl-0">tsconfig.json           # </span><span class="hl-4">IDE</span><span class="hl-2">/</span><span class="hl-1">разработка</span><span class="hl-0"> (парсер читает проект отсюда)</span><br/><span class="hl-0">tsconfig.base.json      # общие опции TypeScript, алиасы </span><span class="hl-2">import</span><br/><span class="hl-0">package.json            # скрипты </span><span class="hl-5">&quot;lint&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;lint:fix&quot;</span>
+</code><button>Copy</button></pre>
+
+                    <hr />
+                    <h2
+                        id="3-минимальный-набор-действий"
+                        class="tsd-anchor-link">
+                        3. Минимальный набор действий<a
+                            href="#3-минимальный-набор-действий"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ol>
+                        <li>
+                            Уточните в <code>eslint.config.js</code> пути и
+                            области действия (<code>files</code>, раздел
+                            игноров).
+                        </li>
+                        <li>
+                            Проверьте, что
+                            <code>parserOptions.project</code> указывает на ваш
+                            <code>tsconfig.json</code>.
+                        </li>
+                        <li>
+                            (Опционально) Добавьте/исключите правила под
+                            корпоративные требования.
+                        </li>
+                        <li>Запустите проверку:</li>
+                    </ol>
+                    <pre><code class="bash"><span class="hl-1">npm</span><span class="hl-0"> </span><span class="hl-5">run</span><span class="hl-0"> </span><span class="hl-5">lint</span><br/><span class="hl-1">npm</span><span class="hl-0"> </span><span class="hl-5">run</span><span class="hl-0"> </span><span class="hl-5">lint:fix</span>
+</code><button type="button">Copy</button></pre>
+
+                    <hr />
+                    <h2
+                        id="4-рекомендуемая-конфигурация-flat-esm"
+                        class="tsd-anchor-link">
+                        4. Рекомендуемая конфигурация
+                        <code>eslint.config.js</code> (Flat, ESM)<a
+                            href="#4-рекомендуемая-конфигурация-flat-esm"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Ниже пример, согласованный с шаблоном. Измените паттерны
+                        и правила по своему проекту.
+                    </p>
+                    <pre><code class="js"><span class="hl-3">// eslint.config.js (ESM, Flat Config)</span><br/><span class="hl-3">//</span><br/><span class="hl-3">// Назначение: единые правила анализа кода для JS/TS (NodeNext + ESM) с</span><br/><span class="hl-3">// типо-осведомленным режимом для исходников и тестов. Совместимо с Prettier.</span><br/><br/><span class="hl-2">import</span><span class="hl-0"> js </span><span class="hl-2">from</span><span class="hl-0"> </span><span class="hl-5">&#39;@eslint/js&#39;</span><span class="hl-0">;</span><br/><span class="hl-2">import</span><span class="hl-0"> tseslint </span><span class="hl-2">from</span><span class="hl-0"> </span><span class="hl-5">&#39;typescript-eslint&#39;</span><span class="hl-0">;</span><br/><span class="hl-2">import</span><span class="hl-0"> globals </span><span class="hl-2">from</span><span class="hl-0"> </span><span class="hl-5">&#39;globals&#39;</span><span class="hl-0">;</span><br/><span class="hl-2">import</span><span class="hl-0"> prettier </span><span class="hl-2">from</span><span class="hl-0"> </span><span class="hl-5">&#39;eslint-config-prettier&#39;</span><span class="hl-0">;</span><br/><span class="hl-2">import</span><span class="hl-0"> { fileURLToPath } </span><span class="hl-2">from</span><span class="hl-0"> </span><span class="hl-5">&#39;url&#39;</span><span class="hl-0">;</span><br/><span class="hl-2">import</span><span class="hl-0"> { dirname } </span><span class="hl-2">from</span><span class="hl-0"> </span><span class="hl-5">&#39;path&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-4">__filename</span><span class="hl-0"> </span><span class="hl-2">=</span><span class="hl-0"> </span><span class="hl-1">fileURLToPath</span><span class="hl-0">(</span><span class="hl-2">import</span><span class="hl-0">.</span><span class="hl-4">meta</span><span class="hl-0">.url);</span><br/><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-4">__dirname</span><span class="hl-0"> </span><span class="hl-2">=</span><span class="hl-0"> </span><span class="hl-1">dirname</span><span class="hl-0">(__filename);</span><br/><br/><span class="hl-2">export</span><span class="hl-0"> </span><span class="hl-2">default</span><span class="hl-0"> [</span><br/><span class="hl-0">    </span><span class="hl-3">// 1) Глобальные исключения (Flat Config)</span><br/><span class="hl-0">    {</span><br/><span class="hl-0">        ignores: [</span><br/><span class="hl-0">            </span><span class="hl-5">&#39;dist&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-5">&#39;docs&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-5">&#39;coverage&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-5">&#39;site&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-5">&#39;node_modules&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-5">&#39;**/*.d.ts&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-5">&#39;**/*.min.js&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">        ],</span><br/><span class="hl-0">    },</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// 2) JavaScript (без TS-плагина)</span><br/><span class="hl-0">    {</span><br/><span class="hl-0">        </span><span class="hl-2">...</span><span class="hl-0">js.configs.recommended,</span><br/><span class="hl-0">        files: [</span><span class="hl-5">&#39;**/*.{js,mjs,cjs}&#39;</span><span class="hl-0">],</span><br/><span class="hl-0">        languageOptions: {</span><br/><span class="hl-0">            </span><span class="hl-2">...</span><span class="hl-0">js.configs.recommended.languageOptions,</span><br/><span class="hl-0">            ecmaVersion: </span><span class="hl-4">2022</span><span class="hl-0">,</span><br/><span class="hl-0">            sourceType: </span><span class="hl-5">&#39;module&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">            globals: { </span><span class="hl-2">...</span><span class="hl-0">globals.node },</span><br/><span class="hl-0">        },</span><br/><span class="hl-0">        rules: {</span><br/><span class="hl-0">            </span><span class="hl-2">...</span><span class="hl-0">js.configs.recommended.rules,</span><br/><span class="hl-0">            </span><span class="hl-3">// при необходимости: &#39;no-console&#39;: [&#39;warn&#39;, { allow: [&#39;warn&#39;, &#39;error&#39;] }],</span><br/><span class="hl-0">        },</span><br/><span class="hl-0">    },</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// 3) TypeScript — базовые рекомендованные (без типов)</span><br/><span class="hl-0">    </span><span class="hl-2">...</span><span class="hl-0">tseslint.configs.recommended,</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// 4) TypeScript — рекомендуемые с типами</span><br/><span class="hl-0">    </span><span class="hl-2">...</span><span class="hl-0">tseslint.configs.recommendedTypeChecked.</span><span class="hl-1">map</span><span class="hl-0">((</span><span class="hl-6">cfg</span><span class="hl-0">) </span><span class="hl-2">=&gt;</span><span class="hl-0"> ({</span><br/><span class="hl-0">        </span><span class="hl-2">...</span><span class="hl-0">cfg,</span><br/><span class="hl-0">        files: [</span><span class="hl-5">&#39;src/**/*.{ts,tsx}&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;tests/**/*.{ts,tsx}&#39;</span><span class="hl-0">],</span><br/><span class="hl-0">        languageOptions: {</span><br/><span class="hl-0">            </span><span class="hl-2">...</span><span class="hl-0">cfg.languageOptions,</span><br/><span class="hl-0">            parserOptions: {</span><br/><span class="hl-0">                </span><span class="hl-2">...</span><span class="hl-0">cfg.languageOptions?.parserOptions,</span><br/><span class="hl-0">                project: [</span><span class="hl-5">&#39;./tsconfig.json&#39;</span><span class="hl-0">],</span><br/><span class="hl-0">                tsconfigRootDir: __dirname,</span><br/><span class="hl-0">            },</span><br/><span class="hl-0">        },</span><br/><span class="hl-0">    })),</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// 5) TypeScript — стилистические правила (type-checked, опционально)</span><br/><span class="hl-0">    </span><span class="hl-2">...</span><span class="hl-0">tseslint.configs.stylisticTypeChecked.</span><span class="hl-1">map</span><span class="hl-0">((</span><span class="hl-6">cfg</span><span class="hl-0">) </span><span class="hl-2">=&gt;</span><span class="hl-0"> ({</span><br/><span class="hl-0">        </span><span class="hl-2">...</span><span class="hl-0">cfg,</span><br/><span class="hl-0">        files: [</span><span class="hl-5">&#39;src/**/*.{ts,tsx}&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;tests/**/*.{ts,tsx}&#39;</span><span class="hl-0">],</span><br/><span class="hl-0">        languageOptions: {</span><br/><span class="hl-0">            </span><span class="hl-2">...</span><span class="hl-0">cfg.languageOptions,</span><br/><span class="hl-0">            parserOptions: {</span><br/><span class="hl-0">                </span><span class="hl-2">...</span><span class="hl-0">cfg.languageOptions?.parserOptions,</span><br/><span class="hl-0">                project: [</span><span class="hl-5">&#39;./tsconfig.json&#39;</span><span class="hl-0">],</span><br/><span class="hl-0">                tsconfigRootDir: __dirname,</span><br/><span class="hl-0">            },</span><br/><span class="hl-0">        },</span><br/><span class="hl-0">        </span><span class="hl-3">// при необходимости:</span><br/><span class="hl-0">        </span><span class="hl-3">// rules: {</span><br/><span class="hl-0">        </span><span class="hl-3">//   &#39;@typescript-eslint/consistent-type-imports&#39;: [&#39;warn&#39;, { prefer: &#39;type-imports&#39; }],</span><br/><span class="hl-0">        </span><span class="hl-3">//   &#39;@typescript-eslint/no-confusing-void-expression&#39;: [&#39;error&#39;, { ignoreArrowShorthand: true }],</span><br/><span class="hl-0">        </span><span class="hl-3">// },</span><br/><span class="hl-0">    })),</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// 6) Тесты — глобалы Jest (без плагина)</span><br/><span class="hl-0">    {</span><br/><span class="hl-0">        files: [</span><span class="hl-5">&#39;tests/**/*.{ts,tsx,js,mjs,cjs}&#39;</span><span class="hl-0">],</span><br/><span class="hl-0">        languageOptions: {</span><br/><span class="hl-0">            globals: { </span><span class="hl-2">...</span><span class="hl-0">globals.node, </span><span class="hl-2">...</span><span class="hl-0">globals.jest },</span><br/><span class="hl-0">        },</span><br/><span class="hl-0">    },</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// 7) Общие опции линтера</span><br/><span class="hl-0">    {</span><br/><span class="hl-0">        linterOptions: {</span><br/><span class="hl-0">            reportUnusedDisableDirectives: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">        },</span><br/><span class="hl-0">    },</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// 8) Интеграция с Prettier (должна быть последней)</span><br/><span class="hl-0">    prettier,</span><br/><span class="hl-0">];</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p><strong>Что менять под свой проект:</strong></p>
+                    <ul>
+                        <li>
+                            Блок <code>ignores</code> — добавьте ваши каталоги
+                            сборки/кэша.
+                        </li>
+                        <li>
+                            Блоки <code>files</code> — если исходники или тесты
+                            лежат в других путях.
+                        </li>
+                        <li>
+                            <code>parserOptions.project</code> — путь(и) к
+                            актуальному <code>tsconfig.json</code>.
+                        </li>
+                        <li>
+                            При необходимости задайте свои правила в секциях
+                            <code>rules</code>.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="5-согласование-с-typescript"
+                        class="tsd-anchor-link">
+                        5. Согласование с TypeScript<a
+                            href="#5-согласование-с-typescript"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            <p>
+                                В <code>tsconfig.base.json</code> рекомендуется:
+                            </p>
+                            <ul>
+                                <li>
+                                    <code>module: &quot;NodeNext&quot;</code>,
+                                    <code
+                                        >moduleResolution:
+                                        &quot;NodeNext&quot;</code
+                                    >,
+                                    <code
+                                        >moduleDetection:
+                                        &quot;force&quot;</code
+                                    >;
+                                </li>
+                                <li>
+                                    строгий режим (<code>strict: true</code>) и
+                                    согласованные флаги;
+                                </li>
+                                <li>
+                                    алиасы в <code>paths</code> (например,
+                                    <code
+                                        >&quot;@/*&quot;:
+                                        [&quot;src/*&quot;]</code
+                                    >).
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>В <code>tsconfig.json</code> (IDE):</p>
+                            <ul>
+                                <li>
+                                    включите
+                                    <code
+                                        >&quot;types&quot;: [&quot;node&quot;,
+                                        &quot;jest&quot;]</code
+                                    >, если IDE не подхватывает их
+                                    автоматически;
+                                </li>
+                                <li>
+                                    используйте <code>noEmit: true</code> и
+                                    <code>sourceMap: true</code> для удобной
+                                    разработки.
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="6-интеграция-с-prettier" class="tsd-anchor-link">
+                        6. Интеграция с Prettier<a
+                            href="#6-интеграция-с-prettier"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Конфигурация уже подключает
+                        <code>eslint-config-prettier</code>
+                        <strong>последним элементом</strong>, чтобы отключить
+                        правила, конфликтующие с форматированием. Проверяйте,
+                        что:
+                    </p>
+                    <ul>
+                        <li>в проекте есть <code>prettier.config.js</code>;</li>
+                        <li>
+                            форматирование выполняется отдельно (<code
+                                >npm run prettier</code
+                            >) или через <code>lint-staged</code>.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="7-интеграция-с-редактором-vs-code"
+                        class="tsd-anchor-link">
+                        7. Интеграция с редактором (VS Code)<a
+                            href="#7-интеграция-с-редактором-vs-code"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>Рекомендуемые настройки рабочего пространства:</p>
+                    <pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;eslint.useFlatConfig&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;eslint.workingDirectories&quot;</span><span class="hl-0">: [{ </span><span class="hl-4">&quot;mode&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;auto&quot;</span><span class="hl-0"> }],</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;editor.codeActionsOnSave&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;source.fixAll.eslint&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;explicit&quot;</span><span class="hl-0"> </span><span class="hl-3">// VS Code ≥1.75</span><br/><span class="hl-0">    },</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;eslint.format.enable&quot;</span><span class="hl-0">: </span><span class="hl-4">false</span><span class="hl-0"> </span><span class="hl-3">// форматирование делает Prettier</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <blockquote>
+                        <p>
+                            Если используете форматирование при сохранении,
+                            назначьте Prettier как default formatter и не
+                            смешивайте его с <code>eslint --fix</code> в одном
+                            шаге.
+                        </p>
+                    </blockquote>
+                    <hr />
+                    <h2 id="8-интеграция-с-pre-commit" class="tsd-anchor-link">
+                        8. Интеграция с <code>lint-staged</code> (pre-commit)<a
+                            href="#8-интеграция-с-pre-commit"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Запускайте автоисправление только для staged-файлов.
+                        Пример:
+                    </p>
+                    <pre><code class="js"><span class="hl-3">// .lintstagedrc.mjs</span><br/><span class="hl-2">export</span><span class="hl-0"> </span><span class="hl-2">default</span><span class="hl-0"> {</span><br/><span class="hl-0">    ignore: [</span><span class="hl-5">&#39;dist/**&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;build/**&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;coverage/**&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;docs/**&#39;</span><span class="hl-0">],</span><br/><span class="hl-0">    </span><span class="hl-5">&#39;src/**/*.{ts,tsx}&#39;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;eslint --fix --cache --no-warn-ignored --max-warnings=0&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><span class="hl-0">    </span><span class="hl-5">&#39;tests/**/*.{ts,tsx,js,cjs,mjs}&#39;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;eslint --fix --cache --no-warn-ignored --max-warnings=0&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><span class="hl-0">};</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>Хук:</p>
+                    <pre><code class="sh"><span class="hl-3"># .husky/pre-commit</span><br/><span class="hl-3">#!/usr/bin/env sh</span><br/><span class="hl-4">.</span><span class="hl-0"> </span><span class="hl-5">&quot;$(</span><span class="hl-1">dirname</span><span class="hl-5"> </span><span class="hl-4">--</span><span class="hl-5"> &quot;</span><span class="hl-4">$0</span><span class="hl-5">&quot;)/_/husky.sh&quot;</span><br/><span class="hl-1">npx</span><span class="hl-0"> </span><span class="hl-5">lint-staged</span>
+</code><button type="button">Copy</button></pre>
+
+                    <hr />
+                    <h2
+                        id="9-часто-настраиваемые-правила"
+                        class="tsd-anchor-link">
+                        9. Часто настраиваемые правила<a
+                            href="#9-часто-настраиваемые-правила"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Ниже — типовые правила для библиотек. Добавляйте их в
+                        подходящий блок <code>rules</code>:
+                    </p>
+                    <pre><code class="js"><span class="hl-1">rules</span><span class="hl-0">: {</span><br/><span class="hl-0">  </span><span class="hl-3">// согласованный стиль импортов типов</span><br/><span class="hl-0">  </span><span class="hl-5">&#39;@typescript-eslint/consistent-type-imports&#39;</span><span class="hl-0">: [</span><span class="hl-5">&#39;warn&#39;</span><span class="hl-0">, { prefer: </span><span class="hl-5">&#39;type-imports&#39;</span><span class="hl-0"> }],</span><br/><br/><span class="hl-0">  </span><span class="hl-3">// запрет неиспользуемых переменных с игнорированием _префикса</span><br/><span class="hl-0">  </span><span class="hl-5">&#39;@typescript-eslint/no-unused-vars&#39;</span><span class="hl-0">: [</span><span class="hl-5">&#39;warn&#39;</span><span class="hl-0">, { argsIgnorePattern: </span><span class="hl-5">&#39;^_&#39;</span><span class="hl-0">, varsIgnorePattern: </span><span class="hl-5">&#39;^_&#39;</span><span class="hl-0"> }],</span><br/><br/><span class="hl-0">  </span><span class="hl-3">// явные модификаторы доступа (на усмотрение команды)</span><br/><span class="hl-0">  </span><span class="hl-3">// &#39;@typescript-eslint/explicit-member-accessibility&#39;: [&#39;warn&#39;, { accessibility: &#39;no-public&#39; }],</span><br/><br/><span class="hl-0">  </span><span class="hl-3">// предпочтение nullish coalescing и optional chaining</span><br/><span class="hl-0">  </span><span class="hl-5">&#39;no-restricted-syntax&#39;</span><span class="hl-0">: [</span><br/><span class="hl-0">    </span><span class="hl-5">&#39;warn&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    {</span><br/><span class="hl-0">      selector: </span><span class="hl-5">&quot;BinaryExpression[operator=&#39;||&#39;][right.value=null]&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">      message: </span><span class="hl-5">&#39;Рассмотрите ?? для null/undefined.&#39;</span><br/><span class="hl-0">    }</span><br/><span class="hl-0">  ]</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <blockquote>
+                        <p>
+                            Уточняйте уровень строгости (<code>off</code> |
+                            <code>warn</code> | <code>error</code>) под ваш
+                            процесс.
+                        </p>
+                    </blockquote>
+                    <hr />
+                    <h2 id="10-скрипты-в" class="tsd-anchor-link">
+                        10. Скрипты в <code>package.json</code
+                        ><a
+                            href="#10-скрипты-в"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>В шаблоне уже определены:</p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;scripts&quot;</span><span class="hl-0">: {</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;lint&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;eslint </span><span class="hl-4">\&quot;</span><span class="hl-5">src/**/*.ts</span><span class="hl-4">\&quot;</span><span class="hl-5"> </span><span class="hl-4">\&quot;</span><span class="hl-5">tests/**/*.ts</span><span class="hl-4">\&quot;</span><span class="hl-5">&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-4">&quot;lint:fix&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;eslint </span><span class="hl-4">\&quot;</span><span class="hl-5">src/**/*.ts</span><span class="hl-4">\&quot;</span><span class="hl-5"> </span><span class="hl-4">\&quot;</span><span class="hl-5">tests/**/*.ts</span><span class="hl-4">\&quot;</span><span class="hl-5"> --fix&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    },</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>
+                        При необходимости расширьте паттерны (<code>*.js</code>,
+                        конфиги) либо добавьте <code>--cache</code> для
+                        ускорения.
+                    </p>
+                    <hr />
+                    <h2 id="11-ci-и-контроль-в-pr" class="tsd-anchor-link">
+                        11. CI и контроль в PR<a
+                            href="#11-ci-и-контроль-в-pr"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>Рекомендуемый минимальный набор:</p>
+                    <pre><code class="bash"><span class="hl-1">npm</span><span class="hl-0"> </span><span class="hl-5">ci</span><br/><span class="hl-1">npm</span><span class="hl-0"> </span><span class="hl-5">run</span><span class="hl-0"> </span><span class="hl-5">typecheck</span><br/><span class="hl-1">npm</span><span class="hl-0"> </span><span class="hl-5">run</span><span class="hl-0"> </span><span class="hl-5">lint</span><br/><span class="hl-1">npm</span><span class="hl-0"> </span><span class="hl-5">test</span><br/><span class="hl-1">npm</span><span class="hl-0"> </span><span class="hl-5">run</span><span class="hl-0"> </span><span class="hl-5">build</span>
+</code><button type="button">Copy</button></pre>
+
+                    <ul>
+                        <li>
+                            Для больших репозиториев добавляйте
+                            <code>--max-warnings=0</code>, чтобы проваливать
+                            сборку при появлении предупреждений.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="12-диагностика-и-типовые-проблемы"
+                        class="tsd-anchor-link">
+                        12. Диагностика и типовые проблемы<a
+                            href="#12-диагностика-и-типовые-проблемы"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        <strong
+                            >Parsing error: Cannot read file
+                            'tsconfig.json'</strong
+                        >
+                        → Убедитесь, что
+                        <code>parserOptions.project</code> указывает на
+                        существующий <code>tsconfig.json</code>, а
+                        <code>tsconfigRootDir</code> равен корню репозитория
+                        (или каталогу конфигурации).
+                    </p>
+                    <p>
+                        <strong
+                            >ESLint couldn’t find the config
+                            &quot;…&quot;</strong
+                        >
+                        → Проверьте версии пакетов, корректность ESM-импорта и
+                        <code>eslint.useFlatConfig: true</code> в редакторе.
+                    </p>
+                    <p>
+                        <strong>Импорты с алиасом '@/…' не резолвятся</strong> →
+                        Убедитесь, что алиасы объявлены в
+                        <code>tsconfig.base.json</code> → <code>paths</code>.
+                        Для Jest используйте <code>moduleNameMapper</code>. Для
+                        ESLint (импорт-правил) можно дополнительно подключить
+                        <code>eslint-import-resolver-typescript</code> и плагин
+                        <code>eslint-plugin-import</code> (опционально).
+                    </p>
+                    <p>
+                        <strong>Конфликты форматирования</strong> → Проверьте,
+                        что блок <code>prettier</code> подключён
+                        <strong>последним</strong>, и Prettier запускается
+                        отдельно.
+                    </p>
+                    <hr />
+                    <h2 id="13-монорепозиторий" class="tsd-anchor-link">
+                        13. Монорепозиторий<a
+                            href="#13-монорепозиторий"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            Держите базовый <code>eslint.config.js</code> в
+                            корне и добавляйте пакетные конфиги там, где логика
+                            различается (каждый — Flat Config).
+                        </li>
+                        <li>
+                            В VS Code используйте
+                            <code
+                                >&quot;eslint.workingDirectories&quot;: [{
+                                &quot;mode&quot;: &quot;auto&quot; }]</code
+                            >.
+                        </li>
+                        <li>
+                            Для проектных ссылок TypeScript включайте
+                            <code>composite: true</code> и актуализируйте
+                            <code>parserOptions.project</code> на каждый пакет.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="14-контрольный-список" class="tsd-anchor-link">
+                        14. Контрольный список<a
+                            href="#14-контрольный-список"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            [ ] Обновлён <code>eslint.config.js</code>: игноры,
+                            <code>files</code>, правила.
+                        </li>
+                        <li>
+                            [ ] <code>parserOptions.project</code> указывает на
+                            ваш <code>tsconfig.json</code>.
+                        </li>
+                        <li>
+                            [ ] Подключён <code>prettier</code>
+                            <strong>последним</strong> элементом.
+                        </li>
+                        <li>[ ] Jest-глобалы добавлены для тестов.</li>
+                        <li>
+                            [ ] Скрипты <code>lint</code>/<code>lint:fix</code>
+                            работают локально и в CI.
+                        </li>
+                        <li>
+                            [ ] При необходимости расширены правила под
+                            командные стандарты.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="15-пример-тестовой-связки" class="tsd-anchor-link">
+                        15. Пример тестовой связки<a
+                            href="#15-пример-тестовой-связки"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        <strong><code>tests/example.test.ts</code></strong>
+                    </p>
+                    <pre><code class="ts"><span class="hl-2">import</span><span class="hl-0"> { sum } </span><span class="hl-2">from</span><span class="hl-0"> </span><span class="hl-5">&#39;@/math/sum.js&#39;</span><span class="hl-0">;</span><br/><br/><span class="hl-1">describe</span><span class="hl-0">(</span><span class="hl-5">&#39;sum&#39;</span><span class="hl-0">, () </span><span class="hl-2">=&gt;</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-1">it</span><span class="hl-0">(</span><span class="hl-5">&#39;adds numbers&#39;</span><span class="hl-0">, () </span><span class="hl-2">=&gt;</span><span class="hl-0"> {</span><br/><span class="hl-0">        </span><span class="hl-1">expect</span><span class="hl-0">(</span><span class="hl-1">sum</span><span class="hl-0">(</span><span class="hl-4">2</span><span class="hl-0">, </span><span class="hl-4">3</span><span class="hl-0">)).</span><span class="hl-1">toBe</span><span class="hl-0">(</span><span class="hl-4">5</span><span class="hl-0">);</span><br/><span class="hl-0">    });</span><br/><span class="hl-0">});</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>
+                        <strong><code>src/math/sum.ts</code></strong>
+                    </p>
+                    <pre><code class="ts"><span class="hl-2">export</span><span class="hl-0"> </span><span class="hl-2">function</span><span class="hl-0"> </span><span class="hl-1">sum</span><span class="hl-0">(</span><span class="hl-6">a</span><span class="hl-2">:</span><span class="hl-0"> </span><span class="hl-4">number</span><span class="hl-0">, </span><span class="hl-6">b</span><span class="hl-2">:</span><span class="hl-0"> </span><span class="hl-4">number</span><span class="hl-0">)</span><span class="hl-2">:</span><span class="hl-0"> </span><span class="hl-4">number</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-2">return</span><span class="hl-0"> a </span><span class="hl-2">+</span><span class="hl-0"> b;</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <hr />
+                    <p>
+                        Настройка завершена. После корректировки конфигурации
+                        выполните <code>npm run lint:fix</code>, зафиксируйте
+                        изменения и добавьте проверку в CI.
+                    </p>
+                </div>
+            </div>
+            <div class="col-sidebar">
+                <div class="page-menu">
+                    <div class="tsd-navigation settings">
+                        <details class="tsd-accordion">
+                            <summary class="tsd-accordion-summary">
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    aria-hidden="true">
+                                    <use
+                                        href="../assets/icons.svg#icon-chevronDown"></use>
+                                </svg>
+                                <h3>Settings</h3>
+                            </summary>
+                            <div class="tsd-accordion-details">
+                                <div class="tsd-filter-visibility">
+                                    <span class="settings-label"
+                                        >Member Visibility</span
+                                    >
+                                    <ul id="tsd-filter-options">
+                                        <li class="tsd-filter-item">
+                                            <label class="tsd-filter-input"
+                                                ><input
+                                                    type="checkbox"
+                                                    id="tsd-filter-protected"
+                                                    name="protected" /><svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                    aria-hidden="true">
+                                                    <rect
+                                                        class="tsd-checkbox-background"
+                                                        width="30"
+                                                        height="30"
+                                                        x="1"
+                                                        y="1"
+                                                        rx="6"
+                                                        fill="none"></rect>
+                                                    <path
+                                                        class="tsd-checkbox-checkmark"
+                                                        d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25"
+                                                        stroke="none"
+                                                        stroke-width="3.5"
+                                                        stroke-linejoin="round"
+                                                        fill="none"></path></svg
+                                                ><span>Protected</span></label
+                                            >
+                                        </li>
+                                        <li class="tsd-filter-item">
+                                            <label class="tsd-filter-input"
+                                                ><input
+                                                    type="checkbox"
+                                                    id="tsd-filter-inherited"
+                                                    name="inherited"
+                                                    checked /><svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                    aria-hidden="true">
+                                                    <rect
+                                                        class="tsd-checkbox-background"
+                                                        width="30"
+                                                        height="30"
+                                                        x="1"
+                                                        y="1"
+                                                        rx="6"
+                                                        fill="none"></rect>
+                                                    <path
+                                                        class="tsd-checkbox-checkmark"
+                                                        d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25"
+                                                        stroke="none"
+                                                        stroke-width="3.5"
+                                                        stroke-linejoin="round"
+                                                        fill="none"></path></svg
+                                                ><span>Inherited</span></label
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tsd-theme-toggle">
+                                    <label
+                                        class="settings-label"
+                                        for="tsd-theme"
+                                        >Theme</label
+                                    ><select id="tsd-theme">
+                                        <option value="os">OS</option>
+                                        <option value="light">Light</option>
+                                        <option value="dark">Dark</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                    <details open class="tsd-accordion tsd-page-navigation">
+                        <summary class="tsd-accordion-summary">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-chevronDown"></use>
+                            </svg>
+                            <h3>On This Page</h3>
+                        </summary>
+                        <div class="tsd-accordion-details">
+                            <a href="#руководство-по-настройке-eslint"
+                                ><span
+                                    >Руководство по настройке
+                                    <wbr />ES<wbr />Lint</span
+                                ></a
+                            >
+                            <ul>
+                                <li>
+                                    <a href="#1-что-вы-получите"
+                                        ><span>1. Что вы получите</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#2-какие-файлы-изменять"
+                                        ><span>2. Какие файлы изменять</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#3-минимальный-набор-действий"
+                                        ><span
+                                            >3. Минимальный набор действий</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#4-рекомендуемая-конфигурация-flat-esm"
+                                        ><span
+                                            >4. Рекомендуемая конфигурация (<wbr />Flat,
+                                            <wbr />ESM)</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#5-согласование-с-typescript"
+                                        ><span
+                                            >5. Согласование с
+                                            <wbr />Type<wbr />Script</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#6-интеграция-с-prettier"
+                                        ><span
+                                            >6. Интеграция с
+                                            <wbr />Prettier</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#7-интеграция-с-редактором-vs-code"
+                                        ><span
+                                            >7. Интеграция с редактором (<wbr />VS
+                                            <wbr />Code)</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#8-интеграция-с-pre-commit"
+                                        ><span
+                                            >8. Интеграция с (pre-<wbr />commit)</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#9-часто-настраиваемые-правила"
+                                        ><span
+                                            >9. Часто настраиваемые
+                                            правила</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#10-скрипты-в"
+                                        ><span>10. Скрипты в </span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#11-ci-и-контроль-в-pr"
+                                        ><span
+                                            >11. <wbr />CI и контроль в
+                                            <wbr />PR</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#12-диагностика-и-типовые-проблемы"
+                                        ><span
+                                            >12. Диагностика и типовые
+                                            проблемы</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#13-монорепозиторий"
+                                        ><span>13. Монорепозиторий</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#14-контрольный-список"
+                                        ><span>14. Контрольный список</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#15-пример-тестовой-связки"
+                                        ><span
+                                            >15. Пример тестовой связки</span
+                                        ></a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+                <div class="site-menu">
+                    <nav id="tsd-sidebar-links" class="tsd-navigation">
+                        <a
+                            href="https://github.com/rotcetihra/ts-template-project"
+                            class="tsd-nav-link"
+                            >GitHub</a
+                        >
+                    </nav>
+                    <nav class="tsd-navigation">
+                        <a href="../modules.html"
+                            >@rotcetihra/ts-template-project - v0.5.0</a
+                        >
+                        <ul
+                            class="tsd-small-nested-navigation"
+                            id="tsd-nav-container">
+                            <li>Loading...</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <footer></footer>
+        <div class="overlay"></div>
+    </body>
+</html>

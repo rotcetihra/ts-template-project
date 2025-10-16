@@ -1,0 +1,890 @@
+<!doctype html>
+<html class="default" lang="en" data-base="../">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="IE=edge" />
+        <title>
+            Подробная настройка Commitlint | @rotcetihra/ts-template-project -
+            v0.5.0
+        </title>
+        <meta
+            name="description"
+            content="Documentation for @rotcetihra/ts-template-project" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="../assets/style.css" />
+        <link rel="stylesheet" href="../assets/highlight.css" />
+        <script defer src="../assets/main.js"></script>
+        <script async src="../assets/icons.js" id="tsd-icons-script"></script>
+        <script async src="../assets/search.js" id="tsd-search-script"></script>
+        <script
+            async
+            src="../assets/navigation.js"
+            id="tsd-nav-script"></script>
+        <script
+            async
+            src="../assets/hierarchy.js"
+            id="tsd-hierarchy-script"></script>
+        <link rel="stylesheet" href="../assets/typedoc-github-style.css" />
+    </head>
+    <body>
+        <script>
+            document.documentElement.dataset.theme =
+                localStorage.getItem('tsd-theme') || 'os';
+            document.body.style.display = 'none';
+            setTimeout(
+                () =>
+                    window.app ?
+                        app.showPage()
+                    :   document.body.style.removeProperty('display'),
+                500,
+            );
+        </script>
+        <header class="tsd-page-toolbar">
+            <div class="tsd-toolbar-contents container">
+                <a
+                    href="https://github.com/rotcetihra/ts-template-project"
+                    class="title"
+                    >@rotcetihra/ts-template-project - v0.5.0</a
+                >
+                <div id="tsd-toolbar-links">
+                    <a href="https://github.com/rotcetihra/ts-template-project"
+                        >GitHub</a
+                    >
+                </div>
+                <button
+                    id="tsd-search-trigger"
+                    class="tsd-widget"
+                    aria-label="Search">
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true">
+                        <use href="../assets/icons.svg#icon-search"></use>
+                    </svg>
+                </button>
+                <dialog id="tsd-search" aria-label="Search">
+                    <input
+                        role="combobox"
+                        id="tsd-search-input"
+                        aria-controls="tsd-search-results"
+                        aria-autocomplete="list"
+                        aria-expanded="true"
+                        autocapitalize="off"
+                        autocomplete="off"
+                        placeholder="Search the docs"
+                        maxlength="100" />
+                    <ul role="listbox" id="tsd-search-results"></ul>
+                    <div
+                        id="tsd-search-status"
+                        aria-live="polite"
+                        aria-atomic="true">
+                        <div>Preparing search index...</div>
+                    </div>
+                </dialog>
+                <a
+                    href="#"
+                    class="tsd-widget menu"
+                    id="tsd-toolbar-menu-trigger"
+                    data-toggle="menu"
+                    aria-label="Menu"
+                    ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true">
+                        <use href="../assets/icons.svg#icon-menu"></use></svg
+                ></a>
+            </div>
+        </header>
+        <div class="container container-main">
+            <div class="col-content">
+                <div class="tsd-page-title">
+                    <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+                        <li>
+                            <a href="" aria-current="page"
+                                >Подробная настройка Commitlint</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class="tsd-panel tsd-typography">
+                    <h1
+                        id="руководство-по-настройке-commitlint"
+                        class="tsd-anchor-link">
+                        Руководство по настройке <strong>Commitlint</strong
+                        ><a
+                            href="#руководство-по-настройке-commitlint"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h1>
+                    <p>
+                        <strong>Назначение:</strong> пошаговая инструкция для
+                        пользователя, который берет шаблон
+                        <code>ts-template-project</code> и настраивает проверку
+                        сообщений коммитов в стиле
+                        <strong>Conventional Commits</strong>. Все зависимости
+                        уже установлены; требуется лишь скорректировать
+                        конфигурацию, добавить/изменить типы, области и
+                        подключить хук <code>commit-msg</code>.
+                    </p>
+                    <hr />
+                    <h2 id="1-что-вы-получите" class="tsd-anchor-link">
+                        1. Что вы получите<a
+                            href="#1-что-вы-получите"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            Единый стиль сообщений коммитов, совместимый с
+                            автогенерацией <strong>CHANGELOG</strong> и релизов.
+                        </li>
+                        <li>
+                            Строгую валидацию структуры:
+                            <code>type(scope): subject</code> +
+                            <code>body</code>/<code>footer</code>.
+                        </li>
+                        <li>
+                            Гибкую настройку правил: допустимые типы,
+                            обязательность области, длина заголовка, регистр
+                            темы и др.
+                        </li>
+                        <li>
+                            Интеграцию с <strong>Husky</strong> и подготовку к
+                            релизному пайплайну
+                            (<strong>standard-version</strong>).
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="2-какие-файлы-изменять" class="tsd-anchor-link">
+                        2. Какие файлы изменять<a
+                            href="#2-какие-файлы-изменять"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>Типовой набор:</p>
+                    <pre><code><span class="hl-0">commitlint.config.cjs    # конфигурация </span><span class="hl-1">Commitlint</span><span class="hl-0"> (CommonJS)</span><br/><span class="hl-0">.husky</span><span class="hl-2">/</span><span class="hl-0">commit</span><span class="hl-2">-</span><span class="hl-0">msg        # git</span><span class="hl-2">-</span><span class="hl-0">хук для проверки сообщений</span><br/><span class="hl-0">package.json             # скрипты </span><span class="hl-1">релизов</span><span class="hl-0"> (уже настроены в шаблоне)</span>
+</code><button>Copy</button></pre>
+
+                    <blockquote>
+                        <p>
+                            В шаблоне уже стоят пакеты
+                            <code>@commitlint/cli</code> и
+                            <code>@commitlint/config-conventional</code>.
+                        </p>
+                    </blockquote>
+                    <hr />
+                    <h2
+                        id="3-минимальный-набор-действий"
+                        class="tsd-anchor-link">
+                        3. Минимальный набор действий<a
+                            href="#3-минимальный-набор-действий"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ol>
+                        <li>
+                            Создайте/отредактируйте
+                            <code>commitlint.config.cjs</code> (см. раздел 4).
+                        </li>
+                        <li>
+                            Подключите хук <code>commit-msg</code> (см. раздел
+                            5).
+                        </li>
+                        <li>
+                            Согласуйте типы и, при необходимости, области
+                            (<code>scope</code>) под домены вашего проекта.
+                        </li>
+                        <li>
+                            Проверьте локально: выполните тестовый коммит и
+                            убедитесь, что некорректные сообщения блокируются.
+                        </li>
+                    </ol>
+                    <hr />
+                    <h2
+                        id="4-рекомендуемая-конфигурация"
+                        class="tsd-anchor-link">
+                        4. Рекомендуемая конфигурация
+                        <code>commitlint.config.cjs</code
+                        ><a
+                            href="#4-рекомендуемая-конфигурация"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Ниже конфигурация, согласованная с шаблоном. Измените
+                        типы/правила под свои требования.
+                    </p>
+                    <pre><code class="js"><span class="hl-3">// commitlint.config.cjs</span><br/><br/><span class="hl-3">/** </span><span class="hl-2">@type</span><span class="hl-3"> </span><span class="hl-1">{import(&#39;@commitlint/types&#39;).UserConfig}</span><span class="hl-3"> */</span><br/><span class="hl-4">module</span><span class="hl-0">.</span><span class="hl-4">exports</span><span class="hl-0"> </span><span class="hl-2">=</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-3">// Базовый набор правил Conventional Commits</span><br/><span class="hl-0">    extends: [</span><span class="hl-5">&#39;@commitlint/config-conventional&#39;</span><span class="hl-0">],</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// Дополнительные правила проекта</span><br/><span class="hl-0">    rules: {</span><br/><span class="hl-0">        </span><span class="hl-3">// HEADER</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;header-max-length&#39;</span><span class="hl-0">: [</span><span class="hl-4">2</span><span class="hl-0">, </span><span class="hl-5">&#39;always&#39;</span><span class="hl-0">, </span><span class="hl-4">100</span><span class="hl-0">], </span><span class="hl-3">// ограничение длины заголовка</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;type-empty&#39;</span><span class="hl-0">: [</span><span class="hl-4">2</span><span class="hl-0">, </span><span class="hl-5">&#39;never&#39;</span><span class="hl-0">], </span><span class="hl-3">// тип обязателен</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;type-enum&#39;</span><span class="hl-0">: [</span><br/><span class="hl-0">            </span><span class="hl-3">// допустимые типы</span><br/><span class="hl-0">            </span><span class="hl-4">2</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-5">&#39;always&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">            [</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;build&#39;</span><span class="hl-0">, </span><span class="hl-3">// сборка, инструменты, CI/CD</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;chore&#39;</span><span class="hl-0">, </span><span class="hl-3">// прочие задачи без изменения кода/тестов</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;ci&#39;</span><span class="hl-0">, </span><span class="hl-3">// конфигурации CI</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;docs&#39;</span><span class="hl-0">, </span><span class="hl-3">// документация</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;feat&#39;</span><span class="hl-0">, </span><span class="hl-3">// новая функциональность</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;fix&#39;</span><span class="hl-0">, </span><span class="hl-3">// исправление дефекта</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;perf&#39;</span><span class="hl-0">, </span><span class="hl-3">// производительность</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;refactor&#39;</span><span class="hl-0">, </span><span class="hl-3">// рефакторинг без изменения поведения</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;revert&#39;</span><span class="hl-0">, </span><span class="hl-3">// откат</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;style&#39;</span><span class="hl-0">, </span><span class="hl-3">// форматирование, пробелы, точки с запятой и т. п.</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;test&#39;</span><span class="hl-0">, </span><span class="hl-3">// тесты</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;release&#39;</span><span class="hl-0">, </span><span class="hl-3">// релизные коммиты (теги, версии)</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;security&#39;</span><span class="hl-0">, </span><span class="hl-3">// устранение уязвимостей</span><br/><span class="hl-0">                </span><span class="hl-5">&#39;deps&#39;</span><span class="hl-0">, </span><span class="hl-3">// обновления зависимостей</span><br/><span class="hl-0">            ],</span><br/><span class="hl-0">        ],</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;subject-empty&#39;</span><span class="hl-0">: [</span><span class="hl-4">2</span><span class="hl-0">, </span><span class="hl-5">&#39;never&#39;</span><span class="hl-0">], </span><span class="hl-3">// тема обязательна</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;subject-case&#39;</span><span class="hl-0">: [</span><span class="hl-4">2</span><span class="hl-0">, </span><span class="hl-5">&#39;always&#39;</span><span class="hl-0">, [</span><span class="hl-5">&#39;lower-case&#39;</span><span class="hl-0">]], </span><span class="hl-3">// тема в нижнем регистре</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;subject-full-stop&#39;</span><span class="hl-0">: [</span><span class="hl-4">2</span><span class="hl-0">, </span><span class="hl-5">&#39;never&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;.&#39;</span><span class="hl-0">], </span><span class="hl-3">// без точки в конце заголовка</span><br/><br/><span class="hl-0">        </span><span class="hl-3">// SCOPE</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;scope-empty&#39;</span><span class="hl-0">: [</span><span class="hl-4">0</span><span class="hl-0">], </span><span class="hl-3">// область не обязательна</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;scope-case&#39;</span><span class="hl-0">: [</span><span class="hl-4">2</span><span class="hl-0">, </span><span class="hl-5">&#39;always&#39;</span><span class="hl-0">, </span><span class="hl-5">&#39;kebab-case&#39;</span><span class="hl-0">], </span><span class="hl-3">// формат области</span><br/><br/><span class="hl-0">        </span><span class="hl-3">// BODY / FOOTER</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;body-leading-blank&#39;</span><span class="hl-0">: [</span><span class="hl-4">2</span><span class="hl-0">, </span><span class="hl-5">&#39;always&#39;</span><span class="hl-0">], </span><span class="hl-3">// пустая строка перед body</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;footer-leading-blank&#39;</span><span class="hl-0">: [</span><span class="hl-4">2</span><span class="hl-0">, </span><span class="hl-5">&#39;always&#39;</span><span class="hl-0">], </span><span class="hl-3">// пустая строка перед footer</span><br/><span class="hl-0">        </span><span class="hl-3">// Примеры дополнительных ограничений:</span><br/><span class="hl-0">        </span><span class="hl-3">// &#39;body-max-line-length&#39;: [2, &#39;always&#39;, 120],</span><br/><span class="hl-0">        </span><span class="hl-3">// &#39;footer-max-line-length&#39;: [2, &#39;always&#39;, 120],</span><br/><span class="hl-0">        </span><span class="hl-3">// &#39;references-empty&#39;: [2, &#39;never&#39;], // требовать ссылки на задачи</span><br/><span class="hl-0">    },</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// (Опционально) игнорировать некоторые сообщения</span><br/><span class="hl-0">    </span><span class="hl-3">// ignores: [(message) =&gt; message.startsWith(&#39;WIP&#39;)],</span><br/><span class="hl-0">};</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p><strong>Что менять под свой проект:</strong></p>
+                    <ul>
+                        <li>
+                            <code>type-enum</code>: добавляйте/удаляйте типы,
+                            которые реально используете.
+                        </li>
+                        <li>
+                            <code>scope-case</code> и <code>scope-empty</code>:
+                            зафиксируйте стиль областей и их обязательность.
+                        </li>
+                        <li>
+                            <code>subject-case</code>: если требуется свободный
+                            регистр (например, с прописной буквы для русского),
+                            отключите правило (<code>[0]</code>).
+                        </li>
+                        <li>
+                            Лимиты длины: подберите комфортный
+                            <code>header-max-length</code> и ограничения для
+                            <code>body/footer</code>.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="5-подключение-git-хука-husky"
+                        class="tsd-anchor-link">
+                        5. Подключение Git-хука
+                        <code>commit-msg</code> (Husky)<a
+                            href="#5-подключение-git-хука-husky"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Создайте хук, который запускает валидацию на каждый
+                        коммит:
+                    </p>
+                    <pre><code class="sh"><span class="hl-3"># .husky/commit-msg</span><br/><span class="hl-3">#!/usr/bin/env sh</span><br/><span class="hl-4">.</span><span class="hl-0"> </span><span class="hl-5">&quot;$(</span><span class="hl-1">dirname</span><span class="hl-5"> </span><span class="hl-4">--</span><span class="hl-5"> &quot;</span><span class="hl-4">$0</span><span class="hl-5">&quot;)/_/husky.sh&quot;</span><br/><br/><span class="hl-1">npx</span><span class="hl-0"> </span><span class="hl-4">--no-install</span><span class="hl-0"> </span><span class="hl-5">commitlint</span><span class="hl-0"> </span><span class="hl-4">--edit</span><span class="hl-0"> </span><span class="hl-5">&quot;</span><span class="hl-4">$1</span><span class="hl-5">&quot;</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>Права на исполнение:</p>
+                    <pre><code class="sh"><span class="hl-1">chmod</span><span class="hl-0"> </span><span class="hl-5">+x</span><span class="hl-0"> </span><span class="hl-5">.husky/commit-msg</span>
+</code><button type="button">Copy</button></pre>
+
+                    <blockquote>
+                        <p>
+                            В шаблоне скрипт <code>prepare: husky</code> уже
+                            есть. Если Husky не установлен, выполните
+                            <code>npx husky init</code> в корне.
+                        </p>
+                    </blockquote>
+                    <hr />
+                    <h2
+                        id="6-правила-conventional-commits-краткий-справочник"
+                        class="tsd-anchor-link">
+                        6. Правила Conventional Commits: краткий справочник<a
+                            href="#6-правила-conventional-commits-краткий-справочник"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <h3 id="61-заголовок" class="tsd-anchor-link">
+                        6.1 Заголовок<a
+                            href="#61-заголовок"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h3>
+                    <p>Формат:</p>
+                    <pre><code><span class="hl-0">&lt;</span><span class="hl-1">type</span><span class="hl-0">&gt;(&lt;</span><span class="hl-1">scope</span><span class="hl-0">&gt;)</span><span class="hl-2">?:</span><span class="hl-0"> &lt;</span><span class="hl-1">subject</span><span class="hl-0">&gt;</span>
+</code><button>Copy</button></pre>
+
+                    <p>Примеры:</p>
+                    <pre><code><span class="hl-1">feat</span><span class="hl-0">(core): добавить фабрику билдеров</span><br/><span class="hl-1">fix</span><span class="hl-0">(utils): корректный парсинг </span><span class="hl-4">JSON</span><span class="hl-0"> ошибок</span><br/><span class="hl-1">docs</span><span class="hl-0">: обновить раздел </span><span class="hl-5">&quot;Быстрый старт&quot;</span>
+</code><button>Copy</button></pre>
+
+                    <p>Рекомендации:</p>
+                    <ul>
+                        <li>
+                            <strong>Type</strong> отражает природу изменения
+                            (см. <code>type-enum</code>).
+                        </li>
+                        <li>
+                            <strong>Scope</strong> описывает подсистему,
+                            подпакет или слой: <code>core</code>,
+                            <code>builders</code>, <code>utils</code>,
+                            <code>types</code>, <code>docs</code>.
+                        </li>
+                        <li>
+                            <strong>Subject</strong> в императивной форме, без
+                            точки и в нижнем регистре.
+                        </li>
+                    </ul>
+                    <h3 id="62-body" class="tsd-anchor-link">
+                        6.2 Body<a
+                            href="#62-body"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h3>
+                    <ul>
+                        <li>
+                            Подробности изменения, мотивация, риски, способы
+                            тестирования.
+                        </li>
+                        <li>Каждую логическую мысль — отдельным абзацем.</li>
+                        <li>Перед <code>body</code> — пустая строка.</li>
+                    </ul>
+                    <h3 id="63-footer" class="tsd-anchor-link">
+                        6.3 Footer<a
+                            href="#63-footer"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h3>
+                    <ul>
+                        <li>
+                            <p>
+                                Ссылки на задачи/тикеты, пометки
+                                <code>BREAKING CHANGE:</code> и др.
+                            </p>
+                        </li>
+                        <li>
+                            <p>Примеры:</p>
+                            <pre><code><span class="hl-4">BREAKING</span><span class="hl-0"> </span><span class="hl-1">CHANGE</span><span class="hl-0">: переименовано поле options.timeout </span><span class="hl-2">-&gt;</span><span class="hl-0"> requestTimeout</span><br/><span class="hl-0">Closes #</span><span class="hl-4">123</span><br/><span class="hl-0">Ref #</span><span class="hl-4">456</span>
+</code><button>Copy</button></pre>
+                        </li>
+                    </ul>
+                    <h3 id="64-семантические-версии" class="tsd-anchor-link">
+                        6.4 Семантические версии<a
+                            href="#64-семантические-версии"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h3>
+                    <ul>
+                        <li><code>feat:</code> — обычно MINOR;</li>
+                        <li><code>fix:</code> — PATCH;</li>
+                        <li>
+                            <code>BREAKING CHANGE:</code> в body/footer — MAJOR.
+                        </li>
+                        <li>
+                            Совместимо с инструментами релизов (см. раздел 8).
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="7-рекомендации-по-областям-"
+                        class="tsd-anchor-link">
+                        7. Рекомендации по областям (<code>scope</code>)<a
+                            href="#7-рекомендации-по-областям-"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Заранее договоритесь о перечне областей, которые
+                        отражают архитектуру проекта. Примеры для шаблона:
+                    </p>
+                    <pre><code><span class="hl-0">core, builders, utils, types, docs, ci, build, release, tests</span>
+</code><button>Copy</button></pre>
+
+                    <p>
+                        Стилистика: <code>kebab-case</code>. Если область не
+                        нужна, не указывайте её вовсе.
+                    </p>
+                    <hr />
+                    <h2 id="8-интеграция-с-релизами-" class="tsd-anchor-link">
+                        8. Интеграция с релизами
+                        (<code>standard-version</code>)<a
+                            href="#8-интеграция-с-релизами-"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>В шаблоне уже настроены скрипты релизов:</p>
+                    <ul>
+                        <li>
+                            <code>release:patch</code> /
+                            <code>release:minor</code> /
+                            <code>release:major</code>
+                        </li>
+                        <li>
+                            <code>release</code> (по конфигу
+                            <code>.versionrc.cjs</code>)
+                        </li>
+                    </ul>
+                    <p>
+                        <strong>Commitlint</strong> помогает поддерживать
+                        корректные типы и <code>BREAKING CHANGE</code>, чтобы
+                        <code>standard-version</code> формировал
+                        <strong>CHANGELOG</strong> предсказуемо.
+                    </p>
+                    <hr />
+                    <h2
+                        id="9-интерактивные-подсказки-опционально"
+                        class="tsd-anchor-link">
+                        9. Интерактивные подсказки (опционально)<a
+                            href="#9-интерактивные-подсказки-опционально"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Если хочется интерактивного выбора
+                        <code>type</code
+                        >/<code>scope</code>/<code>subject</code>, рассмотрите
+                        установку промпта:
+                    </p>
+                    <pre><code class="bash"><span class="hl-1">npm</span><span class="hl-0"> </span><span class="hl-5">i</span><span class="hl-0"> </span><span class="hl-4">-D</span><span class="hl-0"> </span><span class="hl-5">@commitlint/prompt-cli</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>Запуск:</p>
+                    <pre><code class="bash"><span class="hl-1">npx</span><span class="hl-0"> </span><span class="hl-5">commit</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>
+                        И (по желанию) настройте секцию <code>prompt</code> в
+                        конфиге, чтобы подсказать доступные <code>scopes</code>.
+                    </p>
+                    <hr />
+                    <h2 id="10-ci-и-контроль-в-pr" class="tsd-anchor-link">
+                        10. CI и контроль в PR<a
+                            href="#10-ci-и-контроль-в-pr"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Добавьте шаг, который валидирует
+                        <strong>последний коммит</strong> или диапазон:
+                    </p>
+                    <pre><code class="bash"><span class="hl-3"># проверить сообщение HEAD</span><br/><span class="hl-1">npx</span><span class="hl-0"> </span><span class="hl-5">commitlint</span><span class="hl-0"> </span><span class="hl-4">--from</span><span class="hl-0"> </span><span class="hl-5">HEAD~1</span><span class="hl-0"> </span><span class="hl-4">--to</span><span class="hl-0"> </span><span class="hl-5">HEAD</span>
+</code><button type="button">Copy</button></pre>
+
+                    <p>
+                        Для пул-реквестов в CI можно валидировать все коммиты
+                        ветки:
+                    </p>
+                    <pre><code class="bash"><span class="hl-1">npx</span><span class="hl-0"> </span><span class="hl-5">commitlint</span><span class="hl-0"> </span><span class="hl-4">--from</span><span class="hl-0"> </span><span class="hl-5">origin/main</span><span class="hl-0"> </span><span class="hl-4">--to</span><span class="hl-0"> </span><span class="hl-5">HEAD</span>
+</code><button type="button">Copy</button></pre>
+
+                    <hr />
+                    <h2
+                        id="11-диагностика-и-типичные-проблемы"
+                        class="tsd-anchor-link">
+                        11. Диагностика и типичные проблемы<a
+                            href="#11-диагностика-и-типичные-проблемы"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        <strong
+                            >Сообщение заблокировано, но формат верный
+                            визуально</strong
+                        >
+                        Проверьте пробел после двоеточия и отсутствие точки в
+                        конце заголовка, а также регистр темы.
+                    </p>
+                    <p>
+                        <strong>Слишком длинный заголовок</strong> Сократите
+                        формулировку или перенесите детализацию в
+                        <code>body</code>. Заголовок — до 100 символов
+                        (настраивается).
+                    </p>
+                    <p>
+                        <strong>Нужен тип, отсутствующий в списке</strong>
+                        Добавьте его в <code>type-enum</code>. Не
+                        злоупотребляйте: держите список коротким и понятным
+                        команде.
+                    </p>
+                    <p>
+                        <strong
+                            >Русскоязычные заголовки с прописной буквы</strong
+                        >
+                        Отключите/смягчите <code>subject-case</code>:
+                    </p>
+                    <pre><code class="js"><span class="hl-5">&#39;subject-case&#39;</span><span class="hl-0">: [</span><span class="hl-4">0</span><span class="hl-0">]</span>
+</code><button type="button">Copy</button></pre>
+
+                    <hr />
+                    <h2 id="12-контрольный-список" class="tsd-anchor-link">
+                        12. Контрольный список<a
+                            href="#12-контрольный-список"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            [ ] Создан/обновлен
+                            <code>commitlint.config.cjs</code> с типами и
+                            правилами.
+                        </li>
+                        <li>
+                            [ ] Подключен хук <code>.husky/commit-msg</code>.
+                        </li>
+                        <li>
+                            [ ] Определены области (<code>scope</code>) и стиль
+                            их записи.
+                        </li>
+                        <li>
+                            [ ] Включены правила про пустые строки перед
+                            <code>body</code>/<code>footer</code>.
+                        </li>
+                        <li>
+                            [ ] Настроен пайплайн релизов
+                            (<code>standard-version</code>) и
+                            <strong>CHANGELOG</strong>.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="13-примеры-корректных-сообщений"
+                        class="tsd-anchor-link">
+                        13. Примеры корректных сообщений<a
+                            href="#13-примеры-корректных-сообщений"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <pre><code><span class="hl-1">feat</span><span class="hl-0">(core): добавить фабрику клиентов http</span><br/><br/><span class="hl-0">описание решения, мотивация и ограничения</span><br/><span class="hl-1">refactor</span><span class="hl-0">: выделение общего конфига будет выполнено отдельно</span><br/><br/><span class="hl-0">Closes #</span><span class="hl-4">231</span>
+</code><button>Copy</button></pre>
+
+                    <pre><code><span class="hl-1">fix</span><span class="hl-0">(utils): корректная обработка таймаута при повторной попытке</span><br/><br/><span class="hl-0">причина дефекта и способ воспроизведения</span><br/><span class="hl-0">добавлены юнит</span><span class="hl-2">-</span><span class="hl-0">тесты для edge</span><span class="hl-2">-case</span><br/><br/><span class="hl-0">Ref #</span><span class="hl-4">412</span>
+</code><button>Copy</button></pre>
+
+                    <pre><code><span class="hl-1">perf</span><span class="hl-0">(builders): снизить кол</span><span class="hl-2">-</span><span class="hl-0">во аллокаций в parseConfig</span><br/><br/><span class="hl-4">BREAKING</span><span class="hl-0"> </span><span class="hl-1">CHANGE</span><span class="hl-0">: options.timeout переименован в requestTimeout</span>
+</code><button>Copy</button></pre>
+
+                    <hr />
+                    <p>
+                        После этих шагов все коммиты будут единообразными,
+                        читаемыми и пригодными для автоматического формирования
+                        версий и журналов изменений.
+                    </p>
+                </div>
+            </div>
+            <div class="col-sidebar">
+                <div class="page-menu">
+                    <div class="tsd-navigation settings">
+                        <details class="tsd-accordion">
+                            <summary class="tsd-accordion-summary">
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    aria-hidden="true">
+                                    <use
+                                        href="../assets/icons.svg#icon-chevronDown"></use>
+                                </svg>
+                                <h3>Settings</h3>
+                            </summary>
+                            <div class="tsd-accordion-details">
+                                <div class="tsd-filter-visibility">
+                                    <span class="settings-label"
+                                        >Member Visibility</span
+                                    >
+                                    <ul id="tsd-filter-options">
+                                        <li class="tsd-filter-item">
+                                            <label class="tsd-filter-input"
+                                                ><input
+                                                    type="checkbox"
+                                                    id="tsd-filter-protected"
+                                                    name="protected" /><svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                    aria-hidden="true">
+                                                    <rect
+                                                        class="tsd-checkbox-background"
+                                                        width="30"
+                                                        height="30"
+                                                        x="1"
+                                                        y="1"
+                                                        rx="6"
+                                                        fill="none"></rect>
+                                                    <path
+                                                        class="tsd-checkbox-checkmark"
+                                                        d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25"
+                                                        stroke="none"
+                                                        stroke-width="3.5"
+                                                        stroke-linejoin="round"
+                                                        fill="none"></path></svg
+                                                ><span>Protected</span></label
+                                            >
+                                        </li>
+                                        <li class="tsd-filter-item">
+                                            <label class="tsd-filter-input"
+                                                ><input
+                                                    type="checkbox"
+                                                    id="tsd-filter-inherited"
+                                                    name="inherited"
+                                                    checked /><svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                    aria-hidden="true">
+                                                    <rect
+                                                        class="tsd-checkbox-background"
+                                                        width="30"
+                                                        height="30"
+                                                        x="1"
+                                                        y="1"
+                                                        rx="6"
+                                                        fill="none"></rect>
+                                                    <path
+                                                        class="tsd-checkbox-checkmark"
+                                                        d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25"
+                                                        stroke="none"
+                                                        stroke-width="3.5"
+                                                        stroke-linejoin="round"
+                                                        fill="none"></path></svg
+                                                ><span>Inherited</span></label
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tsd-theme-toggle">
+                                    <label
+                                        class="settings-label"
+                                        for="tsd-theme"
+                                        >Theme</label
+                                    ><select id="tsd-theme">
+                                        <option value="os">OS</option>
+                                        <option value="light">Light</option>
+                                        <option value="dark">Dark</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                    <details open class="tsd-accordion tsd-page-navigation">
+                        <summary class="tsd-accordion-summary">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-chevronDown"></use>
+                            </svg>
+                            <h3>On This Page</h3>
+                        </summary>
+                        <div class="tsd-accordion-details">
+                            <a href="#руководство-по-настройке-commitlint"
+                                ><span
+                                    >Руководство по настройке
+                                    <wbr />Commitlint</span
+                                ></a
+                            >
+                            <ul>
+                                <li>
+                                    <a href="#1-что-вы-получите"
+                                        ><span>1. Что вы получите</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#2-какие-файлы-изменять"
+                                        ><span>2. Какие файлы изменять</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#3-минимальный-набор-действий"
+                                        ><span
+                                            >3. Минимальный набор действий</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#4-рекомендуемая-конфигурация"
+                                        ><span
+                                            >4. Рекомендуемая конфигурация
+                                        </span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#5-подключение-git-хука-husky"
+                                        ><span
+                                            >5. Подключение
+                                            <wbr />Git-<wbr />хука (<wbr />Husky)</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#6-правила-conventional-commits-краткий-справочник"
+                                        ><span
+                                            >6. Правила <wbr />Conventional
+                                            <wbr />Commits: краткий
+                                            справочник</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <ul>
+                                        <li>
+                                            <a href="#61-заголовок"
+                                                ><span>6.1 Заголовок</span></a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a href="#62-body"
+                                                ><span>6.2 <wbr />Body</span></a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a href="#63-footer"
+                                                ><span
+                                                    >6.3 <wbr />Footer</span
+                                                ></a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a href="#64-семантические-версии"
+                                                ><span
+                                                    >6.4 Семантические
+                                                    версии</span
+                                                ></a
+                                            >
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#7-рекомендации-по-областям-"
+                                        ><span
+                                            >7. Рекомендации по областям
+                                            ()</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#8-интеграция-с-релизами-"
+                                        ><span
+                                            >8. Интеграция с релизами ()</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#9-интерактивные-подсказки-опционально"
+                                        ><span
+                                            >9. Интерактивные подсказки
+                                            (опционально)</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#10-ci-и-контроль-в-pr"
+                                        ><span
+                                            >10. <wbr />CI и контроль в
+                                            <wbr />PR</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#11-диагностика-и-типичные-проблемы"
+                                        ><span
+                                            >11. Диагностика и типичные
+                                            проблемы</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#12-контрольный-список"
+                                        ><span>12. Контрольный список</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#13-примеры-корректных-сообщений"
+                                        ><span
+                                            >13. Примеры корректных
+                                            сообщений</span
+                                        ></a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+                <div class="site-menu">
+                    <nav id="tsd-sidebar-links" class="tsd-navigation">
+                        <a
+                            href="https://github.com/rotcetihra/ts-template-project"
+                            class="tsd-nav-link"
+                            >GitHub</a
+                        >
+                    </nav>
+                    <nav class="tsd-navigation">
+                        <a href="../modules.html"
+                            >@rotcetihra/ts-template-project - v0.5.0</a
+                        >
+                        <ul
+                            class="tsd-small-nested-navigation"
+                            id="tsd-nav-container">
+                            <li>Loading...</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <footer></footer>
+        <div class="overlay"></div>
+    </body>
+</html>

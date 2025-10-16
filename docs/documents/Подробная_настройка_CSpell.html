@@ -1,0 +1,733 @@
+<!doctype html>
+<html class="default" lang="en" data-base="../">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="IE=edge" />
+        <title>
+            Подробная настройка CSpell | @rotcetihra/ts-template-project -
+            v0.5.0
+        </title>
+        <meta
+            name="description"
+            content="Documentation for @rotcetihra/ts-template-project" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="../assets/style.css" />
+        <link rel="stylesheet" href="../assets/highlight.css" />
+        <script defer src="../assets/main.js"></script>
+        <script async src="../assets/icons.js" id="tsd-icons-script"></script>
+        <script async src="../assets/search.js" id="tsd-search-script"></script>
+        <script
+            async
+            src="../assets/navigation.js"
+            id="tsd-nav-script"></script>
+        <script
+            async
+            src="../assets/hierarchy.js"
+            id="tsd-hierarchy-script"></script>
+        <link rel="stylesheet" href="../assets/typedoc-github-style.css" />
+    </head>
+    <body>
+        <script>
+            document.documentElement.dataset.theme =
+                localStorage.getItem('tsd-theme') || 'os';
+            document.body.style.display = 'none';
+            setTimeout(
+                () =>
+                    window.app ?
+                        app.showPage()
+                    :   document.body.style.removeProperty('display'),
+                500,
+            );
+        </script>
+        <header class="tsd-page-toolbar">
+            <div class="tsd-toolbar-contents container">
+                <a
+                    href="https://github.com/rotcetihra/ts-template-project"
+                    class="title"
+                    >@rotcetihra/ts-template-project - v0.5.0</a
+                >
+                <div id="tsd-toolbar-links">
+                    <a href="https://github.com/rotcetihra/ts-template-project"
+                        >GitHub</a
+                    >
+                </div>
+                <button
+                    id="tsd-search-trigger"
+                    class="tsd-widget"
+                    aria-label="Search">
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true">
+                        <use href="../assets/icons.svg#icon-search"></use>
+                    </svg>
+                </button>
+                <dialog id="tsd-search" aria-label="Search">
+                    <input
+                        role="combobox"
+                        id="tsd-search-input"
+                        aria-controls="tsd-search-results"
+                        aria-autocomplete="list"
+                        aria-expanded="true"
+                        autocapitalize="off"
+                        autocomplete="off"
+                        placeholder="Search the docs"
+                        maxlength="100" />
+                    <ul role="listbox" id="tsd-search-results"></ul>
+                    <div
+                        id="tsd-search-status"
+                        aria-live="polite"
+                        aria-atomic="true">
+                        <div>Preparing search index...</div>
+                    </div>
+                </dialog>
+                <a
+                    href="#"
+                    class="tsd-widget menu"
+                    id="tsd-toolbar-menu-trigger"
+                    data-toggle="menu"
+                    aria-label="Menu"
+                    ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true">
+                        <use href="../assets/icons.svg#icon-menu"></use></svg
+                ></a>
+            </div>
+        </header>
+        <div class="container container-main">
+            <div class="col-content">
+                <div class="tsd-page-title">
+                    <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+                        <li>
+                            <a href="" aria-current="page"
+                                >Подробная настройка CSpell</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class="tsd-panel tsd-typography">
+                    <h1
+                        id="руководство-по-настройке-cspell"
+                        class="tsd-anchor-link">
+                        Руководство по настройке <strong>CSpell</strong
+                        ><a
+                            href="#руководство-по-настройке-cspell"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h1>
+                    <p>
+                        <strong>Назначение:</strong> пошаговая инструкция для
+                        пользователя, который берет шаблон
+                        <code>ts-template-project</code> и настраивает проверку
+                        орфографии под свой проект. Все зависимости уже
+                        установлены; требуется скорректировать конфигурацию,
+                        игноры, пользовательские словари и интеграцию с
+                        <code>lint-staged</code>/CI.
+                    </p>
+                    <hr />
+                    <h2 id="1-что-вы-получите" class="tsd-anchor-link">
+                        1. Что вы получите<a
+                            href="#1-что-вы-получите"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            Проверку орфографии в коде, документации и
+                            конфигурационных файлах.
+                        </li>
+                        <li>
+                            Поддержку нескольких локалей (например,
+                            <code>en</code> и <code>ru</code>) и внешних
+                            словарей.
+                        </li>
+                        <li>
+                            Низкий «шум» за счет корректных игноров и регулярных
+                            выражений.
+                        </li>
+                        <li>
+                            Интеграцию с pre-commit (<code>lint-staged</code>) и
+                            CI.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="2-какие-файлы-изменять" class="tsd-anchor-link">
+                        2. Какие файлы изменять<a
+                            href="#2-какие-файлы-изменять"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>Типовая структура:</p>
+                    <pre><code><span class="hl-0">.</span><br/><span class="hl-0">├─ cspell.json                # основная </span><span class="hl-1">конфигурация</span><span class="hl-0"> (</span><span class="hl-4">JSON</span><span class="hl-2">/</span><span class="hl-4">JSONC</span><span class="hl-0">)</span><br/><span class="hl-0">├─ .cspell</span><span class="hl-2">/</span><br/><span class="hl-0">│  └─ words.txt       # (опционально) ваш проектный словарь</span><br/><span class="hl-0">├─ .lintstagedrc.mjs          # (опционально) pre</span><span class="hl-2">-</span><span class="hl-0">commit проверка</span><br/><span class="hl-0">└─ package.json               # скрипты, если нужны</span>
+</code><button>Copy</button></pre>
+
+                    <blockquote>
+                        <p>
+                            В шаблоне конфиг уже есть. Обычно вам нужно
+                            скорректировать локали (<code>language</code>),
+                            игноры (<code>ignorePaths</code>) и пользовательские
+                            слова (<code>words</code>) либо вынести их в
+                            отдельный файл-словарь.
+                        </p>
+                    </blockquote>
+                    <hr />
+                    <h2
+                        id="3-минимальный-набор-действий"
+                        class="tsd-anchor-link">
+                        3. Минимальный набор действий<a
+                            href="#3-минимальный-набор-действий"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ol>
+                        <li>
+                            <p>
+                                Откройте <code>cspell.json</code> и установите
+                                нужные локали, например
+                                <code
+                                    >&quot;language&quot;:
+                                    &quot;en,ru&quot;</code
+                                >.
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Убедитесь, что импортирован внешний словарь(и)
+                                для ваших языков (напр.,
+                                <code>@cspell/dict-ru_ru</code>).
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Дополните <code>ignorePaths</code> путями сборки
+                                и бинарных ресурсов вашего проекта.
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Перенесите повторяющиеся термины в
+                                <code>words</code> или в отдельный словарь
+                                <code>.cspell/words.txt</code> и подключите его
+                                (см. раздел 6).
+                            </p>
+                        </li>
+                        <li>
+                            <p>Проверьте работу локально:</p>
+                            <pre><code class="bash"><span class="hl-1">npx</span><span class="hl-0"> </span><span class="hl-5">cspell</span><span class="hl-0"> </span><span class="hl-5">lint</span><span class="hl-0"> </span><span class="hl-4">--no-must-find-files</span><span class="hl-0"> </span><span class="hl-4">--gitignore</span><span class="hl-0"> </span><span class="hl-4">--unique</span><span class="hl-0"> </span><span class="hl-4">--color</span><span class="hl-0"> </span><span class="hl-4">--quiet</span><span class="hl-0"> </span><span class="hl-4">--no-progress</span><span class="hl-0"> </span><span class="hl-5">.</span>
+</code><button type="button">Copy</button></pre>
+                        </li>
+                    </ol>
+                    <hr />
+                    <h2
+                        id="4-рекомендуемая-конфигурация-сгруппировано-и-с-комментариями"
+                        class="tsd-anchor-link">
+                        4. Рекомендуемая конфигурация
+                        <code>cspell.json</code> (сгруппировано и с
+                        комментариями)<a
+                            href="#4-рекомендуемая-конфигурация-сгруппировано-и-с-комментариями"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Ниже приведен вариант конфигурации на основе вашего
+                        файла, дополненный типичными практиками. Формат — JSONC
+                        (с комментариями).
+                    </p>
+                    <pre><code class="jsonc"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-3">// =====================================================================</span><br/><span class="hl-0">    </span><span class="hl-3">// 1) БАЗОВЫЕ ПАРАМЕТРЫ</span><br/><span class="hl-0">    </span><span class="hl-3">// =====================================================================</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// Версия формата конфигурации CSpell.</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;version&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;0.2&quot;</span><span class="hl-0">,</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// Список локалей через запятую. Включаются соответствующие словари.</span><br/><span class="hl-0">    </span><span class="hl-3">// Примеры: &quot;en&quot;, &quot;en-GB&quot;, &quot;en-US&quot;, &quot;ru&quot;, или комбинированно: &quot;en,ru&quot;.</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;language&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;en,ru&quot;</span><span class="hl-0">,</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// Импорт внешних словарей. Требует соответствующих пакетов в devDependencies.</span><br/><span class="hl-0">    </span><span class="hl-3">// Для русского языка — @cspell/dict-ru_ru.</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;import&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;@cspell/dict-ru_ru/cspell-ext.json&quot;</span><span class="hl-0">],</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// По желанию: учитывать .gitignore по умолчанию.</span><br/><span class="hl-0">    </span><span class="hl-3">// Эквивалентно флагу CLI --gitignore.</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;useGitignore&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// =====================================================================</span><br/><span class="hl-0">    </span><span class="hl-3">// 2) ОБЛАСТЬ ПРОВЕРКИ И ИГНОРЫ</span><br/><span class="hl-0">    </span><span class="hl-3">// =====================================================================</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// Пути/паттерны, которые следует исключить из проверки орфографии.</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;ignorePaths&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;node_modules&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;dist&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;build&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;coverage&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;docs&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;site&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;.husky&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;.github&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-3">// Часто встречающиеся кэши и артефакты</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;.turbo&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;.next&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;*.min.js&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/*.d.ts&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;**/*.map&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// Регулярные выражения для игнорирования фрагментов текста в проверяемых файлах.</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;ignoreRegExpList&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-3">// URL (http/https)</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;https?://</span><span class="hl-4">\\</span><span class="hl-5">S+&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-3">// UUID и хэши (7+ шестнадцатеричных символов)</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;</span><span class="hl-4">\\</span><span class="hl-5">b[0-9a-fA-F]{7,}</span><span class="hl-4">\\</span><span class="hl-5">b&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-3">// Семантические версии (например, 1.2.3, 1.2.3-beta.1)</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;</span><span class="hl-4">\\</span><span class="hl-5">b</span><span class="hl-4">\\</span><span class="hl-5">d+</span><span class="hl-4">\\</span><span class="hl-5">.</span><span class="hl-4">\\</span><span class="hl-5">d+</span><span class="hl-4">\\</span><span class="hl-5">.</span><span class="hl-4">\\</span><span class="hl-5">d+(?:-[0-9A-Za-z.-]+)?</span><span class="hl-4">\\</span><span class="hl-5">b&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-3">// Блоки кода в Markdown (```...```)</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;```[</span><span class="hl-4">\\</span><span class="hl-5">s</span><span class="hl-4">\\</span><span class="hl-5">S]*?```&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// =====================================================================</span><br/><span class="hl-0">    </span><span class="hl-3">// 3) СЛОВАРИ И ЯЗЫКОВЫЕ НАСТРОЙКИ</span><br/><span class="hl-0">    </span><span class="hl-3">// =====================================================================</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// Определения собственных словарей (локальные файлы со словами, по одному в строке).</span><br/><span class="hl-0">    </span><span class="hl-3">// Создайте .cspell/words.txt и храните там проектные термины.</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;dictionaryDefinitions&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        {</span><br/><span class="hl-0">            </span><span class="hl-4">&quot;name&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;words&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-4">&quot;path&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;.cspell/words.txt&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">            </span><span class="hl-4">&quot;addWords&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">        },</span><br/><span class="hl-0">    ],</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// Активируемые словари (из import и из dictionaryDefinitions).</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;dictionaries&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;words&quot;</span><span class="hl-0">],</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// Тонкая настройка для отдельных типов файлов.</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;languageSettings&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        {</span><br/><span class="hl-0">            </span><span class="hl-3">// Markdown и MDX: разрешаем составные слова и снижаем шум</span><br/><span class="hl-0">            </span><span class="hl-4">&quot;languageId&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;markdown&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;mdx&quot;</span><span class="hl-0">],</span><br/><span class="hl-0">            </span><span class="hl-4">&quot;allowCompoundWords&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">        },</span><br/><span class="hl-0">        {</span><br/><span class="hl-0">            </span><span class="hl-3">// JSON/JSONC/YAML: чаще встречаются идентификаторы и ключи конфигов</span><br/><span class="hl-0">            </span><span class="hl-4">&quot;languageId&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;json&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;jsonc&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;yaml&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;yml&quot;</span><span class="hl-0">],</span><br/><span class="hl-0">            </span><span class="hl-4">&quot;caseSensitive&quot;</span><span class="hl-0">: </span><span class="hl-4">false</span><span class="hl-0">,</span><br/><span class="hl-0">        },</span><br/><span class="hl-0">    ],</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// =====================================================================</span><br/><span class="hl-0">    </span><span class="hl-3">// 4) ПОЛЬЗОВАТЕЛЬСКИЕ СЛОВА И ОГРАНИЧЕНИЯ</span><br/><span class="hl-0">    </span><span class="hl-3">// =====================================================================</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// Пользовательские слова, признаваемые корректными (имена собственные, термины).</span><br/><span class="hl-0">    </span><span class="hl-3">// Перенесите сюда стабильные термины, либо храните их в words.txt.</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;words&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;Arhitector&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;rotcetihra&quot;</span><span class="hl-0">],</span><br/><br/><span class="hl-0">    </span><span class="hl-3">// Слова, которые следует считать ошибочными (запрещенные варианты).</span><br/><span class="hl-0">    </span><span class="hl-3">// Удобно для фиксации частых опечаток в команде.</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;flagWords&quot;</span><span class="hl-0">: [</span><span class="hl-5">&quot;teh&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;recieve&quot;</span><span class="hl-0">, </span><span class="hl-5">&quot;adress&quot;</span><span class="hl-0">],</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <blockquote>
+                        <p>
+                            Если <code>words.txt</code> отсутствует — создайте
+                            файл и добавляйте в него по одному слову на строку.
+                            Это удобнее, чем постоянно расширять массив
+                            <code>words</code> в JSON.
+                        </p>
+                    </blockquote>
+                    <hr />
+                    <h2
+                        id="5-снижение-«шума»-в-отчётах"
+                        class="tsd-anchor-link">
+                        5. Снижение «шума» в отчётах<a
+                            href="#5-снижение-«шума»-в-отчётах"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            <p>
+                                Поддерживайте актуальный список игноров:
+                                артефакты сборки (<code>dist</code>,
+                                <code>coverage</code>, <code>*.map</code>), кэши
+                                (<code>.turbo</code>, <code>.next</code>),
+                                типовые бинарные расширения.
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Используйте <code>ignoreRegExpList</code> для:
+                            </p>
+                            <ul>
+                                <li>
+                                    URL, версий SemVer, UUID/хэшей, больших
+                                    блоков кода в Markdown.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>
+                                Для Markdown включите
+                                <code>allowCompoundWords</code>, чтобы не
+                                ругаться на составные термины.
+                            </p>
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="6-пользовательские-словари" class="tsd-anchor-link">
+                        6. Пользовательские словари<a
+                            href="#6-пользовательские-словари"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Долгий список терминов лучше хранить в отдельном файле:
+                    </p>
+                    <pre><code><span class="hl-0">.cspell</span><span class="hl-2">/</span><span class="hl-0">words.txt</span>
+</code><button>Copy</button></pre>
+
+                    <p>
+                        Подключение уже показано в
+                        <code>dictionaryDefinitions</code
+                        >/<code>dictionaries</code>. Это облегчает ревью и
+                        поддержку.
+                    </p>
+                    <hr />
+                    <h2 id="7-интеграция-с-pre-commit" class="tsd-anchor-link">
+                        7. Интеграция с <code>lint-staged</code> (pre-commit)<a
+                            href="#7-интеграция-с-pre-commit"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Пример: проверять только изменённые Markdown/текстовые
+                        файлы.
+                    </p>
+                    <pre><code class="js"><span class="hl-3">// .lintstagedrc.mjs</span><br/><span class="hl-2">export</span><span class="hl-0"> </span><span class="hl-2">default</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-5">&#39;**/*.{md,mdx,txt}&#39;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;cspell lint --no-must-find-files --gitignore --unique --color --quiet --no-progress&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><span class="hl-0">    </span><span class="hl-5">&#39;**/*.{json,jsonc,yml,yaml}&#39;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&#39;cspell lint --no-must-find-files --gitignore --unique --color --quiet --no-progress&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    ],</span><br/><span class="hl-0">};</span>
+</code><button type="button">Copy</button></pre>
+
+                    <blockquote>
+                        <p>
+                            Для исходников, где уже есть строгие линтеры, имеет
+                            смысл запускать CSpell только на документации и
+                            конфигурациях, чтобы не дублировать шум.
+                        </p>
+                    </blockquote>
+                    <hr />
+                    <h2
+                        id="8-интеграция-с-редактором-vs-code"
+                        class="tsd-anchor-link">
+                        8. Интеграция с редактором (VS Code)<a
+                            href="#8-интеграция-с-редактором-vs-code"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>
+                        Установите расширение
+                        <strong>Code Spell Checker</strong> и добавьте настройки
+                        рабочего пространства:
+                    </p>
+                    <pre><code class="json"><span class="hl-0">{</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;cSpell.configFile&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;./cspell.json&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;cSpell.language&quot;</span><span class="hl-0">: </span><span class="hl-5">&quot;en,ru&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;cSpell.useGitignore&quot;</span><span class="hl-0">: </span><span class="hl-4">true</span><span class="hl-0">,</span><br/><span class="hl-0">    </span><span class="hl-4">&quot;cSpell.enabledLanguageIds&quot;</span><span class="hl-0">: [</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;markdown&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;mdx&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;json&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;jsonc&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;yaml&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;yml&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;javascript&quot;</span><span class="hl-0">,</span><br/><span class="hl-0">        </span><span class="hl-5">&quot;typescript&quot;</span><br/><span class="hl-0">    ]</span><br/><span class="hl-0">}</span>
+</code><button type="button">Copy</button></pre>
+
+                    <hr />
+                    <h2 id="9-интеграция-с-ci" class="tsd-anchor-link">
+                        9. Интеграция с CI<a
+                            href="#9-интеграция-с-ci"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <p>Минимальный шаг в конвейере:</p>
+                    <pre><code class="bash"><span class="hl-1">npx</span><span class="hl-0"> </span><span class="hl-5">cspell</span><span class="hl-0"> </span><span class="hl-5">lint</span><span class="hl-0"> </span><span class="hl-4">--no-must-find-files</span><span class="hl-0"> </span><span class="hl-4">--gitignore</span><span class="hl-0"> </span><span class="hl-4">--unique</span><span class="hl-0"> </span><span class="hl-4">--color</span><span class="hl-0"> </span><span class="hl-4">--no-progress</span><span class="hl-0"> </span><span class="hl-5">.</span>
+</code><button type="button">Copy</button></pre>
+
+                    <ul>
+                        <li>
+                            <code>--no-must-find-files</code> — не считать
+                            ошибкой отсутствие совпавших файлов.
+                        </li>
+                        <li>
+                            <code>--gitignore</code> — учитывать
+                            <code>.gitignore</code>.
+                        </li>
+                        <li>
+                            <code>--unique</code> — не дублировать одно и то же
+                            слово в выводе.
+                        </li>
+                        <li>
+                            <code>--no-progress</code> — компактный вывод для
+                            CI.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2
+                        id="10-рабочий-процесс-добавления-слов"
+                        class="tsd-anchor-link">
+                        10. Рабочий процесс добавления слов<a
+                            href="#10-рабочий-процесс-добавления-слов"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ol>
+                        <li>Запустите CSpell локально или в PR.</li>
+                        <li>
+                            Если слово корректное, добавьте его в
+                            <code>.cspell/words.txt</code> или в
+                            <code>words</code> в <code>cspell.json</code>.
+                        </li>
+                        <li>
+                            Если слово — частая опечатка, добавьте в
+                            <code>flagWords</code>.
+                        </li>
+                        <li>
+                            Если это шум (URL/хэш/версия), добавьте регулярное
+                            выражение в <code>ignoreRegExpList</code>.
+                        </li>
+                    </ol>
+                    <hr />
+                    <h2 id="11-монорепозиторий" class="tsd-anchor-link">
+                        11. Монорепозиторий<a
+                            href="#11-монорепозиторий"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            Храните корневой <code>cspell.json</code> и
+                            подключайте пакетные словари через
+                            <code>overrides</code> или отдельные
+                            <code>dictionaryDefinitions</code>.
+                        </li>
+                        <li>
+                            Можно завести отдельные <code>words.txt</code> на
+                            пакет и подключать их соответствующими глоссариями.
+                        </li>
+                    </ul>
+                    <hr />
+                    <h2 id="12-контрольный-список" class="tsd-anchor-link">
+                        12. Контрольный список<a
+                            href="#12-контрольный-список"
+                            aria-label="Permalink"
+                            class="tsd-anchor-icon"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-anchor"></use></svg
+                        ></a>
+                    </h2>
+                    <ul>
+                        <li>
+                            [ ] Указаны локали и импортированы нужные внешние
+                            словари.
+                        </li>
+                        <li>
+                            [ ] Настроены <code>ignorePaths</code> и
+                            <code>ignoreRegExpList</code>.
+                        </li>
+                        <li>
+                            [ ] Проектные термины вынесены в
+                            <code>words</code> или
+                            <code>.cspell/words.txt</code>.
+                        </li>
+                        <li>
+                            [ ] Интеграция с <code>lint-staged</code> и/или CI
+                            настроена.
+                        </li>
+                        <li>[ ] Проверка выполняется локально и в PR.</li>
+                    </ul>
+                    <hr />
+                    <p>
+                        После этих шагов CSpell будет работать предсказуемо:
+                        фиксировать реальные опечатки, не создавать лишнего
+                        «шума» и поддерживать общий словарь команды.
+                    </p>
+                </div>
+            </div>
+            <div class="col-sidebar">
+                <div class="page-menu">
+                    <div class="tsd-navigation settings">
+                        <details class="tsd-accordion">
+                            <summary class="tsd-accordion-summary">
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    aria-hidden="true">
+                                    <use
+                                        href="../assets/icons.svg#icon-chevronDown"></use>
+                                </svg>
+                                <h3>Settings</h3>
+                            </summary>
+                            <div class="tsd-accordion-details">
+                                <div class="tsd-filter-visibility">
+                                    <span class="settings-label"
+                                        >Member Visibility</span
+                                    >
+                                    <ul id="tsd-filter-options">
+                                        <li class="tsd-filter-item">
+                                            <label class="tsd-filter-input"
+                                                ><input
+                                                    type="checkbox"
+                                                    id="tsd-filter-protected"
+                                                    name="protected" /><svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                    aria-hidden="true">
+                                                    <rect
+                                                        class="tsd-checkbox-background"
+                                                        width="30"
+                                                        height="30"
+                                                        x="1"
+                                                        y="1"
+                                                        rx="6"
+                                                        fill="none"></rect>
+                                                    <path
+                                                        class="tsd-checkbox-checkmark"
+                                                        d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25"
+                                                        stroke="none"
+                                                        stroke-width="3.5"
+                                                        stroke-linejoin="round"
+                                                        fill="none"></path></svg
+                                                ><span>Protected</span></label
+                                            >
+                                        </li>
+                                        <li class="tsd-filter-item">
+                                            <label class="tsd-filter-input"
+                                                ><input
+                                                    type="checkbox"
+                                                    id="tsd-filter-inherited"
+                                                    name="inherited"
+                                                    checked /><svg
+                                                    width="32"
+                                                    height="32"
+                                                    viewBox="0 0 32 32"
+                                                    aria-hidden="true">
+                                                    <rect
+                                                        class="tsd-checkbox-background"
+                                                        width="30"
+                                                        height="30"
+                                                        x="1"
+                                                        y="1"
+                                                        rx="6"
+                                                        fill="none"></rect>
+                                                    <path
+                                                        class="tsd-checkbox-checkmark"
+                                                        d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25"
+                                                        stroke="none"
+                                                        stroke-width="3.5"
+                                                        stroke-linejoin="round"
+                                                        fill="none"></path></svg
+                                                ><span>Inherited</span></label
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tsd-theme-toggle">
+                                    <label
+                                        class="settings-label"
+                                        for="tsd-theme"
+                                        >Theme</label
+                                    ><select id="tsd-theme">
+                                        <option value="os">OS</option>
+                                        <option value="light">Light</option>
+                                        <option value="dark">Dark</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                    <details open class="tsd-accordion tsd-page-navigation">
+                        <summary class="tsd-accordion-summary">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                aria-hidden="true">
+                                <use
+                                    href="../assets/icons.svg#icon-chevronDown"></use>
+                            </svg>
+                            <h3>On This Page</h3>
+                        </summary>
+                        <div class="tsd-accordion-details">
+                            <a href="#руководство-по-настройке-cspell"
+                                ><span
+                                    >Руководство по настройке
+                                    <wbr />C<wbr />Spell</span
+                                ></a
+                            >
+                            <ul>
+                                <li>
+                                    <a href="#1-что-вы-получите"
+                                        ><span>1. Что вы получите</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#2-какие-файлы-изменять"
+                                        ><span>2. Какие файлы изменять</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#3-минимальный-набор-действий"
+                                        ><span
+                                            >3. Минимальный набор действий</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#4-рекомендуемая-конфигурация-сгруппировано-и-с-комментариями"
+                                        ><span
+                                            >4. Рекомендуемая конфигурация
+                                            (сгруппировано и с
+                                            комментариями)</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#5-снижение-«шума»-в-отчётах"
+                                        ><span
+                                            >5. Снижение «шума» в отчётах</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#6-пользовательские-словари"
+                                        ><span
+                                            >6. Пользовательские словари</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#7-интеграция-с-pre-commit"
+                                        ><span
+                                            >7. Интеграция с (pre-<wbr />commit)</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#8-интеграция-с-редактором-vs-code"
+                                        ><span
+                                            >8. Интеграция с редактором (<wbr />VS
+                                            <wbr />Code)</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#9-интеграция-с-ci"
+                                        ><span
+                                            >9. Интеграция с <wbr />CI</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#10-рабочий-процесс-добавления-слов"
+                                        ><span
+                                            >10. Рабочий процесс добавления
+                                            слов</span
+                                        ></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#11-монорепозиторий"
+                                        ><span>11. Монорепозиторий</span></a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="#12-контрольный-список"
+                                        ><span>12. Контрольный список</span></a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+                <div class="site-menu">
+                    <nav id="tsd-sidebar-links" class="tsd-navigation">
+                        <a
+                            href="https://github.com/rotcetihra/ts-template-project"
+                            class="tsd-nav-link"
+                            >GitHub</a
+                        >
+                    </nav>
+                    <nav class="tsd-navigation">
+                        <a href="../modules.html"
+                            >@rotcetihra/ts-template-project - v0.5.0</a
+                        >
+                        <ul
+                            class="tsd-small-nested-navigation"
+                            id="tsd-nav-container">
+                            <li>Loading...</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <footer></footer>
+        <div class="overlay"></div>
+    </body>
+</html>
