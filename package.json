@@ -61,6 +61,8 @@
         "docs:serve": "http-server docs -p 8080 -c-1 --silent"
     },
     "devDependencies": {
+        "@commitlint/cli": "^20.1.0",
+        "@commitlint/config-conventional": "^20.0.0",
         "@cspell/dict-en_us": "^4.4.19",
         "@cspell/dict-ru_ru": "^2.3.2",
         "@eslint/js": "^9.37.0",
